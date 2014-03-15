@@ -11,3 +11,6 @@ Source Code/GeoGen/src_gui/obj/*
 Source Code/GeoGen/temp/*
 Source Code/Map Generator/obj/*
 Source Code/Tileset Utility/obj/*
+*.opensdf
+Source Code/temp/*
+Source Code/lib/*

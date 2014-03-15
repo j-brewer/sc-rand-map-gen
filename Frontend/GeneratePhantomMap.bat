@@ -10,7 +10,7 @@ set /a ran=(%random%*%random%)
 
 md "%dirName%"
 
-"..\Source Code\bin\GeoGen\geogen.exe" -s %ran% -i "..\Map Templates\Phantom Islands.nut" -n -o "%mpName%" 1025 1 1 0 3 6 8 1 0 -d "%dirName%"
+"..\Source Code\bin\GeoGen\bin\geogen.exe" -s %ran% -i "..\Map Templates\Phantom Islands.nut" -n -o "%mpName%" 1025 1 1 0 3 6 8 1 0 -d "%dirName%"
 
 md "..\Output\FA Maps\CGM-%ran%"
 set outF=..\Output\FA Maps\CGM-%ran%\CGM-%ran%.scmap

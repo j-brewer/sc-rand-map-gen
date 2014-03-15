@@ -4,22 +4,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen Dev", "GeoGen\projec
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen Lib", "GeoGen\project files\GeoGen Lib.vcxproj", "{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen Lib Test", "GeoGen\project files\GeoGen Lib Test.vcxproj", "{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55} = {0F6088B0-1D98-4D2D-B995-D1C45FC78F55}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoGen Studio", "GeoGen\src_gui\GeoGen Studio.csproj", "{EE9C17D4-EA12-4E97-8532-E71E206806ED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7B76756E-BC8F-4D6C-82EF-98F26FAD855F} = {7B76756E-BC8F-4D6C-82EF-98F26FAD855F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen DLL", "GeoGen\project files\GeoGen DLL.vcxproj", "{1F6B5205-6FEB-42F8-9DC7-7F8C2BF84165}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen DLL Test", "GeoGen\project files\GeoGen DLL Test.vcxproj", "{B598D4B4-A22E-40C0-828B-A293B38FB5D6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1F6B5205-6FEB-42F8-9DC7-7F8C2BF84165} = {1F6B5205-6FEB-42F8-9DC7-7F8C2BF84165}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen NET", "GeoGen\project files\GeoGen NET.vcxproj", "{7B76756E-BC8F-4D6C-82EF-98F26FAD855F}"
 EndProject
@@ -61,18 +51,6 @@ Global
 		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Win32.ActiveCfg = Release|Win32
 		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Win32.Build.0 = Release|Win32
 		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|x64.ActiveCfg = Release|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Debug|Win32.Build.0 = Debug|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Debug|x64.ActiveCfg = Debug|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Release|Any CPU.ActiveCfg = Release|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Release|Win32.ActiveCfg = Release|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Release|Win32.Build.0 = Release|Win32
-		{0CE07DBD-AADC-42E5-9B1E-966302EAF03D}.Release|x64.ActiveCfg = Release|Win32
 		{EE9C17D4-EA12-4E97-8532-E71E206806ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE9C17D4-EA12-4E97-8532-E71E206806ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE9C17D4-EA12-4E97-8532-E71E206806ED}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -99,18 +77,6 @@ Global
 		{1F6B5205-6FEB-42F8-9DC7-7F8C2BF84165}.Release|Win32.ActiveCfg = Release|Win32
 		{1F6B5205-6FEB-42F8-9DC7-7F8C2BF84165}.Release|Win32.Build.0 = Release|Win32
 		{1F6B5205-6FEB-42F8-9DC7-7F8C2BF84165}.Release|x64.ActiveCfg = Release|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Debug|Win32.Build.0 = Debug|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Debug|x64.ActiveCfg = Debug|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Release|Any CPU.ActiveCfg = Release|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Release|Win32.ActiveCfg = Release|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Release|Win32.Build.0 = Release|Win32
-		{B598D4B4-A22E-40C0-828B-A293B38FB5D6}.Release|x64.ActiveCfg = Release|Win32
 		{7B76756E-BC8F-4D6C-82EF-98F26FAD855F}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{7B76756E-BC8F-4D6C-82EF-98F26FAD855F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{7B76756E-BC8F-4D6C-82EF-98F26FAD855F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
