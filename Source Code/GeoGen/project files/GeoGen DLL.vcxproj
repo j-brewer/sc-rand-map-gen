@@ -62,7 +62,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(SolutionDir)\bin\GeoGenD.dll</OutputFile>
+      <OutputFile>$(OutDir)GeoGen.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir)/GeoGen/temp/dll/Debug/pdb.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>

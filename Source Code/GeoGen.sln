@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen Dev", "GeoGen\project files\GeoGen.vcxproj", "{66F6AB2A-F3C4-4BF2-A748-EFE501AFCE4B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoGen Lib", "GeoGen\project files\GeoGen Lib.vcxproj", "{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoGen Studio", "GeoGen\src_gui\GeoGen Studio.csproj", "{EE9C17D4-EA12-4E97-8532-E71E206806ED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7B76756E-BC8F-4D6C-82EF-98F26FAD855F} = {7B76756E-BC8F-4D6C-82EF-98F26FAD855F}
@@ -39,18 +37,6 @@ Global
 		{66F6AB2A-F3C4-4BF2-A748-EFE501AFCE4B}.Release|Win32.Build.0 = Release|Win32
 		{66F6AB2A-F3C4-4BF2-A748-EFE501AFCE4B}.Release|x64.ActiveCfg = Release|x64
 		{66F6AB2A-F3C4-4BF2-A748-EFE501AFCE4B}.Release|x64.Build.0 = Release|x64
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Debug|Win32.Build.0 = Debug|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Debug|x64.ActiveCfg = Debug|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Any CPU.ActiveCfg = Release|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Win32.ActiveCfg = Release|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|Win32.Build.0 = Release|Win32
-		{0F6088B0-1D98-4D2D-B995-D1C45FC78F55}.Release|x64.ActiveCfg = Release|Win32
 		{EE9C17D4-EA12-4E97-8532-E71E206806ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE9C17D4-EA12-4E97-8532-E71E206806ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE9C17D4-EA12-4E97-8532-E71E206806ED}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

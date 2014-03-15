@@ -58,7 +58,9 @@ only places trees and rocks, so any other types of props will be ignored.
 
 
 How to build a tileset:
-1. (Optional) Build the Tileset Utility from source code.  A binary has been included in case you want to skip this step.
+1. Build the Tileset Utility from source code.  If you want a prebuilt binary so you can skip this step, let me know and I'll 
+   consider adding one to the distribution.
+
 2. Open the official map editor.
 3. Open or create a map.
 4. Select textures for all strata using the rules above.
