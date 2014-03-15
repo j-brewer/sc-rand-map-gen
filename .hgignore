@@ -1,0 +1,13 @@
+syntax: glob
+Output/FA Maps/*
+Output/Generated Heightmaps/*
+Source Code/bin/*
+*.sdf
+*.suo
+Source Code/GeoGen/bin/*
+*.user
+Source Code/GeoGen/src_gui/obj/Debug/*
+Source Code/GeoGen/src_gui/obj/*
+Source Code/GeoGen/temp/*
+Source Code/Map Generator/obj/*
+Source Code/Tileset Utility/obj/*

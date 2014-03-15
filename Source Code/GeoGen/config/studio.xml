@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <templateFile>..//examples/template.nut</templateFile>
+  <openLastFileOnStartup>true</openLastFileOnStartup>
+  <lastFile>..//examples/</lastFile>
+  <actionAfterExec>GoTo3DOutput</actionAfterExec>
+  <geoGenPath>..//bin/geogen.exe</geoGenPath>
+  <mainMapOutputFile>..//main.shd</mainMapOutputFile>
+  <scriptTempFile>..//studio_temp.nut</scriptTempFile>
+  <geoGenWorkingDirectory>..//temp/studio_maps/temp</geoGenWorkingDirectory>
+  <overlayDirectory>..//overlays</overlayDirectory>
+  <documentationPath>..//documentation.html</documentationPath>
+  <heightScale>8</heightScale>
+  <lastImportedFile />
+  <lastExportedFile />
+  <exportRescaleMode>false</exportRescaleMode>
+  <lastImportedTexture />
+  <lastExportedOutput />
+  <lastExportedScreenshot />
+  <parameters />
+  <seed>0</seed>
+  <defaultFontSize>13</defaultFontSize>
+  <fontSize>13</fontSize>
+  <searchString />
+  <replaceString />
+  <searchMode>OrdinalIgnoreCase</searchMode>
+  <maxMapSize>6000</maxMapSize>
+  <maxMapCount>15</maxMapCount>
+  <autoAcceptCompletion>true</autoAcceptCompletion>
+  <autoInsertBrackets>true</autoInsertBrackets>
+  <openCompletionOnDot>true</openCompletionOnDot>
+  <mainSplitter>1025</mainSplitter>
+  <sidebarSplitter>403</sidebarSplitter>
+  <sidebarMode>Right</sidebarMode>
+  <showStatusbar>true</showStatusbar>
+  <showSidebar>true</showSidebar>
+  <showToolbar>true</showToolbar>
+  <showConsole>true</showConsole>
+  <showParameters>true</showParameters>
+  <wordWrap>false</wordWrap>
+  <editorZooom>0</editorZooom>
+  <windowWidth>1221</windowWidth>
+  <windowHeight>1040</windowHeight>
+  <windowState>Maximized</windowState>
+  <mapDetailLevel>VeryHigh_2048x2048Pixels</mapDetailLevel>
+  <wireframe>false</wireframe>
+  <enableTerrainUnderZero>false</enableTerrainUnderZero>
+  <enable3d>true</enable3d>
+  <defaultTextureOverlay>7</defaultTextureOverlay>
+  <backgroundColor3d>Black</backgroundColor3d>
+  <enableBlackCompensation>true</enableBlackCompensation>
+  <textureScalingAlgorithm>LinearInterpolation</textureScalingAlgorithm>
+  <TemplateFile>..//examples/template.nut</TemplateFile>
+  <OverlayDirectory>..//overlays</OverlayDirectory>
+</Config>

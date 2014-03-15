@@ -1,0 +1,79 @@
+Description:
+Because of the variation in FA stratum textures and props, it didn't make sense to randomly select a 
+bunch of textures and throw them together.  The result would have likely been quite hideous.  To address
+this problem, I used tilesets.  A tileset is a collection of stratum textures and map props defined in 
+an XML file.  Initially, I dumped the stratum and props from each official map into seperate tilesets.  The
+Map Generator would then randomly pick one for use with a map.  This works pretty well.  However, the official maps
+only have 4 stratum.  Since I'd like to have the option of using all 8, the dataset from the official maps will not
+work.  That means, I need people to compile sets of stratum and props that will look good together.
+The more tilesets that are available, the more varied the appearance of the maps will be.
+
+
+Rules for strata:
+Lower Stratum  (i.e. Stratum 0, base stratum):
+The base stratum determines the environment type for the map.  If the base stratum is from the lava environment,
+the map will have a lava environment cube, a lava sky cube, a lava planet background, and a lava water ramp.  Keep this in
+mind when choosing the base stratum.
+
+Stratum 1:
+Map noise/optional texture 1
+The map template may use this texture anywhere on the map to provide variation from base stratum.
+
+Stratum 2:
+Map noise/optional texture 2
+The map template may use this texture anywhere on the map to provide variation from base stratum.
+
+Stratum 3:
+Beach.  This texture will be used in areas adjacent to the water level (if a map has water).  If the map does
+not have water, this texture could still be used for sandy areas.
+
+Stratum 4:
+Low lying terrain.  For vegetation maps, this will probably be grass or forest.  Other environments will
+have different options.
+
+Stratum 5:
+Middle altitude terrain
+An in-between layer for transition between low and high altitude.
+
+Stratum 6:
+High altitude terrain.  For maps with vegetation, this would be the area above the treeline.
+Usually this will be a rock texture, but that is not required.
+
+Stratum 7:
+Snow.  If the map has snow, this is the primary texture that should be used for it.
+(additional snow layers can be used in the set in the lower stratum if an ice type planet is desired)
+
+Stratum 8:
+Cliff/Rock.  This texture will be used for very steep slopes on a map.  It is the top layer, and will paint above 
+everything else.
+
+Upper Stratum (i.e. macro texture):
+Since this is applied as a normal map, the choice for this layer is completely aestetic.  Pick one that
+works well with the underlying strata.
+
+
+Rules for props:
+There are no rules for props.  Choose some that look nice with the selected strata.  Currently, the map generator
+only places trees and rocks, so any other types of props will be ignored.
+
+
+How to build a tileset:
+1. (Optional) Build the Tileset Utility from source code.  A binary has been included in case you want to skip this step.
+2. Open the official map editor.
+3. Open or create a map.
+4. Select textures for all strata using the rules above.
+5. When done, click "File->Export->Theme.  Save the lua file into the "TilesetData-8 Import" folder.  The name on the file will
+   also be used to name the tileset, so choose something that will be unique (i.e. Lava-Tileset-428.lua, etc).
+
+6. Next, add props to the map.   You only need to add one of each prop you want to be used.  The position of the props
+   will not matter.
+
+7. When done, click "File->Export->Props.  Save that lua file in the "TilesetData-8 Import" as well.
+   The props lua file must have the name of the strata file with "-Props" appended (i.e. Lava-Tileset-428-Props.lua).
+
+8. Run the BuildTilesetFiles batch script in the "TilesetData-8 Import" folder.  This will produce one xml tileset file
+   for each stratum/prop lua file pair.
+
+9. To add your XML tileset files into the main tileset file, run the CompileTilesetFiles batch script.  This script
+   will append all XML tilesets in the import folder to the existing TilesetData-8.xml file.  Tilesets with duplicate names
+   will be excluded.

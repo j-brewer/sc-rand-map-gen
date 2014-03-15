@@ -1,0 +1,11 @@
+The goals of the frontend script is to:
+
+1. Select a random seed for use in GeoGen and the Map Generator application
+
+2. Execute GeoGen with appropriate parameters to create a playable heightmap
+   (Ideally, this will also involve randomly selecting a map template)
+
+3. With output from step 2, execute the Map Generation program with 
+   appropriate parameters to create a playable Supreme Commander map
+
+4. Place the finished map in the appropriate location for use with FA

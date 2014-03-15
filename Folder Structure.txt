@@ -1,0 +1,6 @@
+Frontend:  	Scripts used to launch the random map generation process
+Map Templates:	GeoGen heighmap generation scripts
+Misc Data:	Extra text and data files used in map generation
+Output:		Where all the output from GeoGen and the Map Generator is placed
+Source Code:	All projects and source code files are stored here
+Tilesets:	Tilesets (stored in XML) for use in map generation

@@ -1,0 +1,4 @@
+1. Obtain a copy of Microsoft Visual Studio Express 2012 for Windows Desktop.
+   (paid versions of Visual Studio 2012 will work too)
+2. Load the GeoGen solution file and perform a release build of the "GeoGen Dev" and "GeoGen Studio" projects.
+3. Load the Map Generator solution file and build the "Map Generator" and "Tileset Utility" projects.
