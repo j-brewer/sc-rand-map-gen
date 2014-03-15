@@ -86,10 +86,6 @@ static class Program
             m = MapGenerator.GenerateMap(argHeight, argWidth, argInputPath, Device, r.Next(), ts);
             Console.WriteLine(" Done.");
 
-            Console.Write("Saving map information...");
-            m.SaveMapInformation(argInputPath + "\\mapdata.txt");
-            Console.WriteLine(" Done.");
-
             Console.Write("Adding Start Positions...");
             StartLocationGenerator slg = new StartLocationGenerator(Program.MapHeightData, StartPositions, r);
             List<Marker> sList = slg.BuildStartLocationList();
@@ -145,6 +141,10 @@ static class Program
 
             Console.Write("Saving SCMAP file...");
             m.Save(argOutputPath);
+            Console.WriteLine(" Done.");
+
+            Console.Write("Saving map information file...");
+            m.SaveMapInformation(argInputPath + "\\mapdata.txt");
             Console.WriteLine(" Done.");
 
             //Dump Texture Files
