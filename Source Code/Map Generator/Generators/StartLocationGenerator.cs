@@ -55,7 +55,7 @@ public class StartLocationGenerator
 				Rectangle sArea = new Rectangle(iX - StartArea + oX, iY - StartArea + oY, 2 * StartArea, 2 * StartArea);
 				if (IsFlat(sArea)) {
 					done = true;
-					BlankMarker sp = new BlankMarker("ARMY_" + k + 1);
+					BlankMarker sp = new BlankMarker("ARMY_" + ((int)k + 1));
                     sp.Position = new Vector3((float)(iX + 0.5), (float)hMap.GetFAHeight(iX, iY), (float)(iY + 0.5));
 					rt.Add(sp);
 				} else {
