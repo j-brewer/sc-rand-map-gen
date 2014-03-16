@@ -299,7 +299,7 @@ function Generate(){
 	beachTerrain.Smooth(2);
 	beachTerrain.ScaleValuesTo(0,16384);
 	beachTerrain.ScaleTo(mapSize/2,mapSize/2,false)	
-	beachTerrain.ReturnAs("Stratum2");
+	beachTerrain.ReturnAs("Stratum3");
 	
 	
 	local rockMask = GGen_Data_2D(mapSize, mapSize, 0);
@@ -353,6 +353,14 @@ function Generate(){
 	treeMask.AddMap(veryhighTerrain);
 	treeMask.Clamp(0, 2400);
 	treeMask.ReturnAs("TreeMask");
+	
+	local randomTerrain = GGen_Data_2D(mapSize, mapSize, GGEN_NATURAL_PROFILE.Min());
+	randomTerrain.Noise(10, mapSize / 8, GGEN_STD_NOISE);	
+	randomTerrain.ScaleValuesTo(0,1024);
+	randomTerrain.Clamp(0, 896);
+	randomTerrain.ScaleValuesTo(0,16384);
+	randomTerrain.ScaleTo(mapSize/2,mapSize/2,false)
+	randomTerrain.ReturnAs("Stratum2");
 	
 	
 	local randomTerrain = GGen_Data_2D(mapSize, mapSize, GGEN_NATURAL_PROFILE.Min());
