@@ -14,3 +14,4 @@ Source Code/Tileset Utility/obj/*
 *.opensdf
 Source Code/temp/*
 Source Code/lib/*
+Tilesets/TilesetData-8 Import/*.lua

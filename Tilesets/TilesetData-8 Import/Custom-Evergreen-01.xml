@@ -57,7 +57,7 @@
     <Stratum9>
       <TexturePath>/env/evergreen/layers/macrotexture000_albedo.dds</TexturePath>
       <TextureScale>128</TextureScale>
-      <NormalPath />
+      <NormalPath></NormalPath>
       <NormalScale>3.75</NormalScale>
     </Stratum9>
     <Props>
