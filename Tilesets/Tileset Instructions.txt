@@ -42,6 +42,7 @@ Usually this will be a rock texture, but that is not required.
 Stratum 7:
 Snow.  If the map has snow, this is the primary texture that should be used for it.
 (additional snow layers can be used in the set in the lower stratum if an ice type planet is desired)
+For tilesets that shouldn't have snow (i.e. desert) use a suitable replacement texture (or none at all).
 
 Stratum 8:
 Cliff/Rock.  This texture will be used for very steep slopes on a map.  It is the top layer, and will paint above 
