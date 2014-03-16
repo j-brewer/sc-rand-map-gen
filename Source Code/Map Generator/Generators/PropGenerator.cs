@@ -35,8 +35,6 @@ public class PropGenerator
     private Tileset _ts;
     private List<ReclaimableProp> _rockList;
     private List<ReclaimableProp> _treeList;
-    private List<double> _propMassValues;
-    private List<double> _propEnergyValues;
     private double waterElevation;
     public PropGenerator(HeightMap h, Tileset ts, string inputPath, double wElev, int rngSeed)
     {

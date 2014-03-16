@@ -97,6 +97,7 @@
     <Compile Include="Helpers\ScriptFile.cs" />
     <Compile Include="Helpers\TerrainTypeBuilder.cs" />
     <Compile Include="Helpers\TextureMapLoader.cs" />
+    <Compile Include="Helpers\TilesetExporter_Test.cs" />
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="Helpers\WaterMapBuilder.cs" />
     <Compile Include="Objects\Enumerations.cs" />

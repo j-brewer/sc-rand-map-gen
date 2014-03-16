@@ -46,7 +46,6 @@ public class PreviewBuilder
         stratumColors = LoadTextureColors(Device);
 
         //Water Color
-        Color wc = default(Color);
         double waterRedAverage = (((1.0 - wd.ColorLerp.Y) * Convert.ToInt32(Color.Navy.R)) + (wd.ColorLerp.Y * wd.SurfaceColor.X * 255));
         double waterGreenAverage = (((1.0 - wd.ColorLerp.Y) * Convert.ToInt32(Color.Navy.G)) + (wd.ColorLerp.Y * wd.SurfaceColor.Y * 255));
         double waterBlueAverage = (((1.0 - wd.ColorLerp.Y) * Convert.ToInt32(Color.Navy.B)) + (wd.ColorLerp.Y * wd.SurfaceColor.Z * 255));

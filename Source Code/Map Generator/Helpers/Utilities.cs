@@ -65,4 +65,12 @@ public sealed class Utilities
         int a = r.Next(2);
         return (a == 1);
     }
+    public static string GetScDir()
+    {
+        Microsoft.Win32.RegistryKey rk = null;
+        rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\THQ\\Gas Powered Games\\Supreme Commander", false);
+        if (rk == null)
+            return "";
+        return rk.GetValue("InstallationDirectory").ToString();
+    }
 }

@@ -29,7 +29,6 @@ public class MassSpotGenerator
 {
 	private double  HeightTolerance = 15;
 	private int  MaxAttemptsPerMassSpot = 100;
-	private int  WindowSize = 128;
 	private HeightMap hMap;
 	private Random r;
 	private List<Marker> massMarkerList;
