@@ -46,8 +46,7 @@ public class MapGenerator
         m.SunAmbience = GetRandomSunAmbienceColor(r);
 
         //Water
-        //m.Water.HasWater = GetRandomBoolean(r)
-        m.Water.HasWater = true;
+        
         m.Water.Elevation = 17.5f;
         m.Water.ElevationDeep = 15f;
         m.Water.ElevationAbyss = 2.5f;
@@ -116,6 +115,10 @@ public class MapGenerator
             }
         }
         Console.WriteLine(" Done. " + Program.GetTimeStampDifference());
+
+        //Water Check
+        m.Water.HasWater = Program.MapHeightData.MinimumHeightValue < 2240;
+        
 
         Console.Write("  - Building Texture Map...");
         //Texture Maps
