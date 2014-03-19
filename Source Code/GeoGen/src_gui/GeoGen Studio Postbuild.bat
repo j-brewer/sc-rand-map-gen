@@ -1,6 +1,6 @@
 @ECHO OFF
 cd %~dp0
-robocopy %1\config %2\config /MIR /IS /R:0
+robocopy %1\config %2\config /MIR /R:0
 if errorlevel 16 EXIT 16
 if errorlevel 15 EXIT 15
 if errorlevel 14 EXIT 14
