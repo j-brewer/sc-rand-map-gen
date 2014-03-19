@@ -101,7 +101,7 @@ public class Tileset
         XmlDocument xd = new XmlDocument();
         xd.Load(tilesetListPath);
         XmlNodeList ts = xd.SelectNodes("/Tilesets/Tileset");
-        int rndTs = r.Next(0, ts.Count - 1);
+        int rndTs = r.Next(0, ts.Count);
 
         XmlNode sts = ts[rndTs];
         rt.Name  = sts.Attributes["name"].ToString();
