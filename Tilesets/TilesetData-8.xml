@@ -1,4 +1,84 @@
 <Tilesets>
+  <Tileset name="Custom-Desert-01">
+    <Stratum0>
+      <TexturePath>/env/desert/layers/des_gravel01_albedo.dds</TexturePath>
+      <TextureScale>9.5</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock01_normal.dds</NormalPath>
+      <NormalScale>1</NormalScale>
+    </Stratum0>
+    <Stratum1>
+      <TexturePath>/env/desert/layers/des_rock02_albedo.dds</TexturePath>
+      <TextureScale>2.5</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock02_normal.dds</NormalPath>
+      <NormalScale>2.5</NormalScale>
+    </Stratum1>
+    <Stratum2>
+      <TexturePath>/env/desert/layers/des_rock06_albedo.dds</TexturePath>
+      <TextureScale>1</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
+      <NormalScale>1</NormalScale>
+    </Stratum2>
+    <Stratum3>
+      <TexturePath>/env/desert/layers/des_sandmed02_albedo.dds</TexturePath>
+      <TextureScale>4</TextureScale>
+      <NormalPath>/env/desert/layers/des_sandlight_normal.dds</NormalPath>
+      <NormalScale>4</NormalScale>
+    </Stratum3>
+    <Stratum4>
+      <TexturePath>/env/desert/layers/des_sanddark_albedo.dds</TexturePath>
+      <TextureScale>9.5</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
+      <NormalScale>15.75</NormalScale>
+    </Stratum4>
+    <Stratum5>
+      <TexturePath>/env/desert/layers/des_gravel_albedo.dds</TexturePath>
+      <TextureScale>11</TextureScale>
+      <NormalPath>/env/desert/layers/des_gravel_normal.dds</NormalPath>
+      <NormalScale>2.25</NormalScale>
+    </Stratum5>
+    <Stratum6>
+      <TexturePath>/env/desert/layers/des_sanddark02_albedo.dds</TexturePath>
+      <TextureScale>30</TextureScale>
+      <NormalPath>/env/desert/layers/des_sanddark_normal.dds</NormalPath>
+      <NormalScale>30</NormalScale>
+    </Stratum6>
+    <Stratum7>
+      <TexturePath>/env/desert/layers/des_rock05_albedo.dds</TexturePath>
+      <TextureScale>27.25</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
+      <NormalScale>27.25</NormalScale>
+    </Stratum7>
+    <Stratum8>
+      <TexturePath>/env/desert/layers/des_rock03_albedo.dds</TexturePath>
+      <TextureScale>37</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock03a_normal.dds</NormalPath>
+      <NormalScale>37</NormalScale>
+    </Stratum8>
+    <Stratum9>
+      <TexturePath>/env/red barrens/layers/macrotexture001_albedo.dds</TexturePath>
+      <TextureScale>123.25</TextureScale>
+      <NormalPath />
+      <NormalScale>1</NormalScale>
+    </Stratum9>
+    <Props>
+      <Prop>/env/desert/props/trees/groups/manzanita01_group2_prop.bp</Prop>
+      <Prop>/env/desert/props/rocks/des_boulder02_prop.bp</Prop>
+      <Prop>/env/desert/props/rocks/des_boulder04_prop.bp</Prop>
+      <Prop>/env/desert/props/rocks/des_boulder01_prop.bp</Prop>
+      <Prop>/env/desert/props/rocks/des_boulder05_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/manzanita01_s2_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/groups/cactus01_group1_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/cactus01_s1_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/manzanita01_s1_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/groups/cactus01_group2_prop.bp</Prop>
+      <Prop>/env/desert/props/rocks/des_boulder03_prop.bp</Prop>
+      <Prop>/env/desert/props/rocks/des_boulder06_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/cactus01_s2_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/cactus01_s3_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/manzanita01_s3_prop.bp</Prop>
+      <Prop>/env/desert/props/trees/groups/manzanita01_group1_prop.bp</Prop>
+    </Props>
+  </Tileset>
   <Tileset name="Custom-Evergreen-01">
     <Stratum0>
       <TexturePath>/env/evergreen2/layers/evgrass003_albedo.dds</TexturePath>
@@ -79,86 +159,6 @@
       <Prop>/env/evergreen/props/trees/groups/oak01_group2_prop.bp</Prop>
       <Prop>/env/evergreen/props/rocks/rock01_prop.bp</Prop>
       <Prop>/env/evergreen/props/rocks/fieldstone01_prop.bp</Prop>
-    </Props>
-  </Tileset>
-  <Tileset name="Custom-Desert-01">
-    <Stratum0>
-      <TexturePath>/env/desert/layers/des_gravel01_albedo.dds</TexturePath>
-      <TextureScale>9.5</TextureScale>
-      <NormalPath>/env/desert/layers/des_rock01_normal.dds</NormalPath>
-      <NormalScale>1</NormalScale>
-    </Stratum0>
-    <Stratum1>
-      <TexturePath>/env/desert/layers/des_rock02_albedo.dds</TexturePath>
-      <TextureScale>2.5</TextureScale>
-      <NormalPath>/env/desert/layers/des_rock02_normal.dds</NormalPath>
-      <NormalScale>2.5</NormalScale>
-    </Stratum1>
-    <Stratum2>
-      <TexturePath>/env/desert/layers/des_rock06_albedo.dds</TexturePath>
-      <TextureScale>1</TextureScale>
-      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
-      <NormalScale>1</NormalScale>
-    </Stratum2>
-    <Stratum3>
-      <TexturePath>/env/desert/layers/des_sandmed02_albedo.dds</TexturePath>
-      <TextureScale>4</TextureScale>
-      <NormalPath>/env/desert/layers/des_sandlight_normal.dds</NormalPath>
-      <NormalScale>4</NormalScale>
-    </Stratum3>
-    <Stratum4>
-      <TexturePath>/env/desert/layers/des_rock_albedo.dds</TexturePath>
-      <TextureScale>5</TextureScale>
-      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
-      <NormalScale>5</NormalScale>
-    </Stratum4>
-    <Stratum5>
-      <TexturePath>/env/desert/layers/des_gravel_albedo.dds</TexturePath>
-      <TextureScale>11</TextureScale>
-      <NormalPath>/env/desert/layers/des_gravel_normal.dds</NormalPath>
-      <NormalScale>2.25</NormalScale>
-    </Stratum5>
-    <Stratum6>
-      <TexturePath>/env/desert/layers/des_sanddark02_albedo.dds</TexturePath>
-      <TextureScale>30</TextureScale>
-      <NormalPath>/env/desert/layers/des_sanddark_normal.dds</NormalPath>
-      <NormalScale>30</NormalScale>
-    </Stratum6>
-    <Stratum7>
-      <TexturePath>/env/desert/layers/des_rock05_albedo.dds</TexturePath>
-      <TextureScale>27.25</TextureScale>
-      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
-      <NormalScale>27.25</NormalScale>
-    </Stratum7>
-    <Stratum8>
-      <TexturePath>/env/desert/layers/des_rock03_albedo.dds</TexturePath>
-      <TextureScale>37</TextureScale>
-      <NormalPath>/env/desert/layers/des_rock03a_normal.dds</NormalPath>
-      <NormalScale>37</NormalScale>
-    </Stratum8>
-    <Stratum9>
-      <TexturePath>/env/red barrens/layers/macrotexture001_albedo.dds</TexturePath>
-      <TextureScale>123.25</TextureScale>
-      <NormalPath />
-      <NormalScale>1</NormalScale>
-    </Stratum9>
-    <Props>
-      <Prop>/env/desert/props/trees/groups/manzanita01_group2_prop.bp</Prop>
-      <Prop>/env/desert/props/rocks/des_boulder02_prop.bp</Prop>
-      <Prop>/env/desert/props/rocks/des_boulder04_prop.bp</Prop>
-      <Prop>/env/desert/props/rocks/des_boulder01_prop.bp</Prop>
-      <Prop>/env/desert/props/rocks/des_boulder05_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/manzanita01_s2_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/groups/cactus01_group1_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/cactus01_s1_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/manzanita01_s1_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/groups/cactus01_group2_prop.bp</Prop>
-      <Prop>/env/desert/props/rocks/des_boulder03_prop.bp</Prop>
-      <Prop>/env/desert/props/rocks/des_boulder06_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/cactus01_s2_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/cactus01_s3_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/manzanita01_s3_prop.bp</Prop>
-      <Prop>/env/desert/props/trees/groups/manzanita01_group1_prop.bp</Prop>
     </Props>
   </Tileset>
 </Tilesets>

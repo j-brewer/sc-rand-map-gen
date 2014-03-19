@@ -25,10 +25,10 @@
       <NormalScale>4</NormalScale>
     </Stratum3>
     <Stratum4>
-      <TexturePath>/env/desert/layers/des_rock_albedo.dds</TexturePath>
-      <TextureScale>5</TextureScale>
+      <TexturePath>/env/desert/layers/des_sanddark_albedo.dds</TexturePath>
+      <TextureScale>9.5</TextureScale>
       <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
-      <NormalScale>5</NormalScale>
+      <NormalScale>15.75</NormalScale>
     </Stratum4>
     <Stratum5>
       <TexturePath>/env/desert/layers/des_gravel_albedo.dds</TexturePath>
