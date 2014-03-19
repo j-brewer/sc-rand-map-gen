@@ -64,7 +64,7 @@ public class StartLocationGenerator
 					oY = r.Next(-MaxVariance, MaxVariance);
 
 					if (counter >= MaxAttemptsPerStartLocation) {
-						throw new Exception("Could not find a viable starting location for army " + k + 1 + "!  Attempted Coordinates: " + iX + "," + iY + ".");
+                        throw new Exception("Could not find a viable starting location for army " + ((int)k + 1) + "!  Attempted Coordinates: " + iX + "," + iY + ".");
 					}
 				}
 			}
@@ -73,21 +73,35 @@ public class StartLocationGenerator
 	}
 	private bool IsFlat(Rectangle bounds)
 	{
-		bool result = true;
-		for (int j = bounds.Top; j <= bounds.Bottom; j++) {
-			for (int i = bounds.Left; i <= bounds.Right - 1; i++) {
-				if (Math.Abs(Convert.ToInt32(hMap.GetHeight(i, j)) - Convert.ToInt32(hMap.GetHeight(i + 1, j))) > HeightTolerance) {
-					result = false;
-				}
-			}
-		}
-		for (int j = bounds.Top; j <= bounds.Bottom - 1; j++) {
-			for (int i = bounds.Left; i <= bounds.Right; i++) {
-				if (Math.Abs(Convert.ToInt32(hMap.GetHeight(i, j)) - Convert.ToInt32(hMap.GetHeight(i, j + 1))) > HeightTolerance) {
-					result = false;
-				}
-			}
-		}
+        bool result = true;
+        if (bounds.Left < 0 || bounds.Right > hMap.Width || bounds.Top < 0 || bounds.Bottom > hMap.Height)
+        {
+            result = false;
+        }
+        else
+        {
+            
+            for (int j = bounds.Top; j <= bounds.Bottom; j++)
+            {
+                for (int i = bounds.Left; i <= bounds.Right - 1; i++)
+                {
+                    if (Math.Abs(Convert.ToInt32(hMap.GetHeight(i, j)) - Convert.ToInt32(hMap.GetHeight(i + 1, j))) > HeightTolerance)
+                    {
+                        result = false;
+                    }
+                }
+            }
+            for (int j = bounds.Top; j <= bounds.Bottom - 1; j++)
+            {
+                for (int i = bounds.Left; i <= bounds.Right; i++)
+                {
+                    if (Math.Abs(Convert.ToInt32(hMap.GetHeight(i, j)) - Convert.ToInt32(hMap.GetHeight(i, j + 1))) > HeightTolerance)
+                    {
+                        result = false;
+                    }
+                }
+            }
+        }
 		return result;
 	}
 }
