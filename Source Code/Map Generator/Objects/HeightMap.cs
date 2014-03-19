@@ -29,12 +29,14 @@ public class HeightMap
     private int mapHeight;
     private int mapWidth;
     private ushort maxValue;
+    private ushort minValue;
     public HeightMap(int sizeX, int sizeY)
     {
         heightMapData = new ushort[sizeX + 1, sizeY + 1];
         mapHeight = sizeY;
         mapWidth = sizeX;
         maxValue = 0;
+        minValue = 32768;
     }
     public int Height
     {
@@ -57,6 +59,10 @@ public class HeightMap
             {
                 maxValue = val;
             }
+            if ((val < minValue))
+            {
+                minValue = val;
+            }
         }
     }
     public ushort GetHeight(int posX, int posY)
@@ -73,6 +79,10 @@ public class HeightMap
     public ushort MaximumHeightValue
     {
         get { return maxValue; }
+    }
+    public ushort MinimumHeightValue
+    {
+        get { return minValue; }
     }
     public Bitmap CreateBitmap()
     {
@@ -162,6 +172,6 @@ public class HeightMap
     }
     public double GetFAHeight(int x, int y)
     {
-        return (Convert.ToDouble(this.GetHeight(x, y)) / 16384.0) * 127.0;
+        return (Convert.ToDouble(this.GetHeight(x, y)) / 16384.0) * 128.0;
     }
 }
