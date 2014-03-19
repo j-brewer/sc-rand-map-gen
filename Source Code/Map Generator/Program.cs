@@ -104,17 +104,33 @@ static class Program
 
         //Mass Spots
         Console.Write("Adding Mass Spots...");
-        int massDensity = r.Next(1, 9);
-        int massVariance = r.Next(0, (massDensity / 3) + 1);
-        MassSpotGenerator msg = new MassSpotGenerator(Program.MapHeightData, m.Water.Elevation, sList, r.Next());
-        msg.AllowUnderwaterMassSpots = false;
-        msg.AddStartLocationMassSpots();
-        msg.AddStartLocationBasedMassSpots(massDensity, 8, 60);
-        msg.BuildRandomDisributionMassSpotList(massDensity, massVariance, 120);
-
-        List<Marker> mList = msg.GetFinalMassSpotList();
+        int TotalAttempts = 50;
+        int bestIndex = 0;
+        double bestScore = 0;
+        MassSpotGenerator[] mSpotStore = new MassSpotGenerator[TotalAttempts];
+        int massDensityA = r.Next(0, 7);
+        int massDensityB = r.Next(0, 8);
+        for(int i= 0; i < TotalAttempts; i++)
+        {
+            mSpotStore[i] = new MassSpotGenerator(Program.MapHeightData, m.Water.Elevation, sList, r.Next());
+            mSpotStore[i].AllowUnderwaterMassSpots = false;
+            mSpotStore[i].AddStartLocationMassSpots();
+            mSpotStore[i].AddStartLocationBasedMassSpots(massDensityA, 8, 60);
+            mSpotStore[i].BuildRandomDisributionMassSpotList(sList.Count * massDensityB, 60);
+            double thisScore = mSpotStore[i].MassSpotFairnessScore();
+            if (thisScore > bestScore)
+            {
+                bestScore = thisScore;
+                bestIndex = i;
+            }
+            if (bestScore > .97)
+            {
+                break;
+            }
+        }
+        List<Marker> mList = mSpotStore[bestIndex].GetFinalMassSpotList();
         m.MarkerList.AddRange(mList);
-        Console.WriteLine(" " + mList.Count + " mass spots added.");
+        Console.WriteLine(" " + mList.Count + " mass spots added.  Placement Score is " + (100 * bestScore).ToString() + "%" );
 
         //Generate Scenario File
         Console.WriteLine("Creating Scenario File...");
