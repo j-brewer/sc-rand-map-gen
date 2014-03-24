@@ -75,21 +75,25 @@ public class MassSpotGenerator
                 float iY = startPoint.Position.Z;
 
                 ms.Position = new Vector3((iX + 4), (float)hMap.GetFAHeight((int)(iX + 4), (int)iY),iY);
+                ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
 				lastMassId = lastMassId + 1;
 
 				ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
                 ms.Position = new Vector3((iX - 4), (float)hMap.GetFAHeight((int)(iX - 4), (int)iY), iY);
+                ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
 				lastMassId = lastMassId + 1;
 
 				ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
                 ms.Position = new Vector3(iX, (float)hMap.GetFAHeight((int)iX, (int)(iY + 4)), iY + 4);
+                ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
 				lastMassId = lastMassId + 1;
 
 				ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
                 ms.Position = new Vector3(iX, (float)hMap.GetFAHeight((int)iX, (int)(iY - 4)), iY - 4);
+                ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
 				lastMassId = lastMassId + 1;
 			}
@@ -341,13 +345,19 @@ public class MassSpotGenerator
     {
         double rt = 0;
         double[] distScore = new double[startingPositionList.Count];
+        int massSpotCount = 0;
         for (int k = 0; k <= startingPositionList.Count - 1; k++)
         {
             distScore[k] = 0;
             PointF sp = new PointF(startingPositionList[k].Position.X, startingPositionList[k].Position.Z);
-            foreach (Marker mm in massMarkerList)
+            foreach (MassMarker mm in massMarkerList)
             {
-                distScore[k] += GetDistance(new PointF(mm.Position.X, mm.Position.Z), sp);
+                //Exclude starting mass spots for scoring purposes.
+                if (!mm.IsStartingMassSpot)
+                {
+                    distScore[k] += GetDistance(new PointF(mm.Position.X, mm.Position.Z), sp);
+                    massSpotCount++;
+                }
             }
         }
         double minScore = double.MaxValue;
@@ -355,7 +365,7 @@ public class MassSpotGenerator
 
         for (int k = 0; k <= startingPositionList.Count - 1; k++)
         {
-            distScore[k] = distScore[k] / massMarkerList.Count;
+            distScore[k] = distScore[k] / massSpotCount;
             minScore = Math.Min(distScore[k], minScore);
             maxScore = Math.Max(distScore[k], maxScore);
         }

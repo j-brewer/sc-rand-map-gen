@@ -177,6 +177,8 @@ public class MassMarker : Marker
         this.Properties.Add("size", new MarkerProperty(MarkerPropertyType.FloatType, "1.000000"));
         this.Properties.Add("resource", new MarkerProperty(MarkerPropertyType.BooleanType, "true"));
     }
+
+    public bool IsStartingMassSpot;
 }
 
 public class DefensivePointMarker : Marker
