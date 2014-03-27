@@ -192,6 +192,7 @@ function Generate(){
 	
 	local slopeMap = GGen_Data_2D(mapSize, mapSize, GGEN_NATURAL_PROFILE.Min());
 	slopeMap = base.Clone();
+	slopeMap.Clamp(2350, 32767);
 	slopeMap.SlopeMap();
 	slopeMap.ScaleValuesTo(0,1024);
 	slopeMap.Add(-128);
@@ -223,11 +224,12 @@ function Generate(){
 		local y1 = startPos.GetValue(i,1);
 		treeMask.RadialGradient(x1, y1,  32, 0, 0, false);
 	}
-	treeMask.Smooth(2);
+	
 	slopeMap.Invert();
 	veryhighTerrain.Invert();
 	treeMask.AddMap(slopeMap);
 	treeMask.AddMap(veryhighTerrain);
+	treeMask.Smooth(2);
 	treeMask.Clamp(0, 2400);
 	treeMask.ReturnAs("TreeMask");
 	
