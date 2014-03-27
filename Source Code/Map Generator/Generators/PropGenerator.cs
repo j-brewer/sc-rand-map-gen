@@ -44,8 +44,8 @@ public class PropGenerator
         hMap = h;
         this.r = new Random(rngSeed);
         _ts = ts;
-        rockMask = HeightMapLoader.LoadPGMHeightmap(inputPath + "\\RockMask.pgm");
-        treeMask = HeightMapLoader.LoadPGMHeightmap(inputPath + "\\TreeMask.pgm");
+        rockMask = HeightMapLoader.LoadHeightmapWithNoExtension(inputPath + "\\RockMask");
+        treeMask = HeightMapLoader.LoadHeightmapWithNoExtension(inputPath + "\\TreeMask");
         waterElevation = wElev;
         foreach (string bpPath_loopVariable in _ts.RockProps)
         {

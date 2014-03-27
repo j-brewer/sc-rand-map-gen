@@ -105,7 +105,7 @@ public class MapGenerator
         //HeightMap
         Program.timeStamp = DateTime.Now;
         Console.Write("  - Building Height Map...");
-        Program.MapHeightData = HeightMapLoader.LoadPGMHeightmap(inputPath + "\\heightmap.pgm");
+        Program.MapHeightData = HeightMapLoader.LoadHeightmapWithNoExtension(inputPath + "\\heightmap");
 
         for (Int32 ix = 0; ix <= m.Height; ix++)
         {

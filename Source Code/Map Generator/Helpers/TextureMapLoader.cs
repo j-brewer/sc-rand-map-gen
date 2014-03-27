@@ -60,16 +60,16 @@ public class TexturemapLoader
         HeightMap[] tArr = new HeightMap[4];
         for (int i = 0; i <= 3; i++)
         {
-            if (File.Exists(inputPath + "\\Stratum" + (i + startPoint + 1).ToString(CultureInfo.InvariantCulture) + ".pgm"))
+            try
             {
-                tArr[i] = LoadPGMTextureMap(inputPath + "\\Stratum" + (i + startPoint + 1).ToString(CultureInfo.InvariantCulture) + ".pgm");
+                tArr[i] = HeightMapLoader.LoadHeightmapWithNoExtension(inputPath + "\\Stratum" + (i + startPoint + 1).ToString(CultureInfo.InvariantCulture));
                 if (!(tArr[i].Height == strataSize.Y) | !(tArr[i].Width == strataSize.X))
                 {
                     throw new InvalidDataException("Stratum " + (i + startPoint + 1) + " dimensions do not match those provided.");
                 }
             }
-            else
-            {
+            catch (FileNotFoundException)
+            { 
                 tArr[i] = new HeightMap(strataSize.X, strataSize.Y);
             }
         }
@@ -97,52 +97,5 @@ public class TexturemapLoader
     private static int ConvertHeightToByteValue(int value, int maxValue)
     {
         return Convert.ToInt32((Convert.ToDouble(value) / Convert.ToDouble(maxValue)) * 255);
-    }
-    private static HeightMap LoadPGMTextureMap(string filename)
-    {
-        HeightMap h = default(HeightMap);
-        StreamReader fsIn = new StreamReader(filename);
-        string[] currArr = null;
-        int currPosition = 0;
-        int globalPosition = default(Int32);
-
-        string header = fsIn.ReadLine();
-        if (!(header == "P2"))
-        {
-            throw new InvalidDataException("Input file is not a recognized PGM file format!");
-        }
-
-
-        string[] d = fsIn.ReadLine().Split(new char[] { ' ' });
-        int mw = int.Parse(d[0]);
-        int mh = int.Parse(d[1]);
-        int max = int.Parse(fsIn.ReadLine());
-
-        double scaleRatio = 1;
-        h = new HeightMap(mw, mh);
-
-        currArr = fsIn.ReadLine().Split(new char[] { ' ' });
-
-        for (int j = 0; j <= mh; j++)
-        {
-            for (int i = 0; i <= mw - 1; i++)
-            {
-                globalPosition += 1;
-                ushort v = Convert.ToUInt16(scaleRatio * float.Parse(currArr[currPosition]));
-                currPosition = currPosition + 1;
-                if (currPosition == currArr.Length)
-                {
-                    currPosition = 0;
-                    if (!fsIn.EndOfStream)
-                    {
-                        currArr = fsIn.ReadLine().Split(new char[] { ' ' });
-                    }
-                }
-                h.SetHeight(i, j, v);
-            }
-        }
-        fsIn.Close();
-
-        return h;
     }
 }

@@ -74,7 +74,7 @@ static class Program
 
         //Load Start Positions
         Console.Write("Loading Start Position Data...");
-        StartPositions = HeightMapLoader.LoadPGMHeightmap(argInputPath + "\\StartPositions.pgm");
+        StartPositions = HeightMapLoader.LoadHeightmapWithNoExtension(argInputPath + "\\StartPositions");
         Console.WriteLine(" Done.");
 
         //Generate Map

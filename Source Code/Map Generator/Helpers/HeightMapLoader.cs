@@ -20,11 +20,43 @@
 // ***************************************************************************************
 
 
+using System;
 using System.IO;
 
 public class HeightMapLoader
 {
-    public static HeightMap LoadPGMHeightmap(string filename)
+    public static HeightMap LoadHeightmapWithNoExtension(string filename)
+    {
+        if(File.Exists(filename + ".pgm"))
+        {
+            return LoadPGMHeightmap(filename + ".pgm");
+        }
+        else if(File.Exists(filename + ".shd"))
+        {
+            return LoadSHDHeightmap(filename + ".shd");
+        }
+        else
+        {
+            throw new FileNotFoundException("A heightmap with the specified name could not be found.");
+        }
+    }
+    public static HeightMap LoadHeightmap(string filename)
+    {
+        string lcFilename = filename.ToLowerInvariant();
+        if(lcFilename.EndsWith(".pgm"))
+        {
+            return LoadPGMHeightmap(lcFilename);
+        }
+        else if (lcFilename.EndsWith(".shd"))
+        {
+            return LoadSHDHeightmap(lcFilename);
+        }
+        else
+        {
+            throw new ArgumentException("Heightmap file type is not supported.");
+        }
+    }
+    private static HeightMap LoadPGMHeightmap(string filename)
     {
         HeightMap h = default(HeightMap);
         StreamReader fsIn = new StreamReader(filename);
@@ -69,6 +101,26 @@ public class HeightMapLoader
         }
         fsIn.Close();
 
+        return h;
+    }
+    private static HeightMap LoadSHDHeightmap(string filename)
+    {
+        System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+        BinaryReader fsIn = new BinaryReader(fs);
+        
+        int mw = fsIn.ReadInt32();
+        int mh = fsIn.ReadInt32();
+        HeightMap h = new HeightMap(mw, mh);
+        double scaleRatio = 1;
+        for (int j = 0; j < mh; j++)
+        {
+            for (int i = 0; i < mw; i++)
+            {
+                ushort v = (ushort)(scaleRatio * fsIn.ReadInt16());
+                h.SetHeight(i, j, v);
+            }
+        }
+        fsIn.Close();
         return h;
     }
 }
