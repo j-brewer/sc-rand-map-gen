@@ -56,7 +56,7 @@ public class StartLocationGenerator
 				if (IsFlat(sArea)) {
 					done = true;
 					BlankMarker sp = new BlankMarker("ARMY_" + ((int)k + 1));
-                    sp.Position = new Vector3((float)(iX + 0.5), (float)hMap.GetFAHeight(iX, iY), (float)(iY + 0.5));
+                    sp.Position = new Vector3((float)(iX + oX + 0.5), (float)hMap.GetFAHeight(iX + oX, iY + oY), (float)(iY + oY + 0.5));
 					rt.Add(sp);
 				} else {
 					counter = counter + 1;
