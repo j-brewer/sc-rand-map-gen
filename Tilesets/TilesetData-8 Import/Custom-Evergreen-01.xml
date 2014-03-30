@@ -51,8 +51,8 @@
     <Stratum8>
       <TexturePath>/env/evergreen2/layers/evrock007_albedo.dds</TexturePath>
       <TextureScale>14</TextureScale>
-      <NormalPath>/env/evergreen2/layers/evrock007_normal.dds</NormalPath>
-      <NormalScale>14</NormalScale>
+      <NormalPath>/env/tundra/layers/tund_rock_normal.dds</NormalPath>
+      <NormalScale>120</NormalScale>
     </Stratum8>
     <Stratum9>
       <TexturePath>/env/evergreen/layers/macrotexture000_albedo.dds</TexturePath>
