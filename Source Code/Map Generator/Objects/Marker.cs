@@ -176,9 +176,16 @@ public class MassMarker : Marker
         this.Properties.Add("amount", new MarkerProperty(MarkerPropertyType.FloatType, "100.000000"));
         this.Properties.Add("size", new MarkerProperty(MarkerPropertyType.FloatType, "1.000000"));
         this.Properties.Add("resource", new MarkerProperty(MarkerPropertyType.BooleanType, "true"));
+        this.MassSpotScoreMatrix = new List<double>();
     }
 
     public bool IsStartingMassSpot;
+    public List<double> MassSpotScoreMatrix;
+    public int MassSpotNumber;
+    public double GetMassSpotFairness()
+    {
+        return Utilities.CalculateFairnessScore(MassSpotScoreMatrix);
+    }
 }
 
 public class DefensivePointMarker : Marker

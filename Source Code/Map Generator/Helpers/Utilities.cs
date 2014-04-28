@@ -22,6 +22,7 @@
 
 using SlimDX;
 using System;
+using System.Collections.Generic;
 
 public sealed class Utilities
 {
@@ -72,5 +73,23 @@ public sealed class Utilities
         if (rk == null)
             return "";
         return rk.GetValue("InstallationDirectory").ToString();
+    }
+    public static double CalculateFairnessScore(List<double> MassSpotScoreMatrix)
+    {
+        double rtVal = 0;
+        if(MassSpotScoreMatrix.Count > 0)
+        {
+            double min = double.MaxValue;
+            double max = double.MinValue;
+            double total = 0;
+            foreach (double a in MassSpotScoreMatrix)
+            {
+                min = Math.Min(a, min);
+                max = Math.Max(a, max);
+                total += a;
+            }
+            rtVal = 1.0 - ((max - min) / total);
+        }
+        return rtVal;
     }
 }
