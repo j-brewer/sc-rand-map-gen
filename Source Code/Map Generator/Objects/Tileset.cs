@@ -104,7 +104,7 @@ public class Tileset
         int rndTs = r.Next(0, ts.Count);
 
         XmlNode sts = ts[rndTs];
-        rt.Name  = sts.Attributes["name"].ToString();
+        rt.Name  = sts.Attributes["name"].InnerText;
         for (int i = 0; i <= 9; i++)
         {
             XmlNode temp = sts["Stratum" + i];
