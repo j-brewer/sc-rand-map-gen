@@ -33,10 +33,11 @@ public class MassSpotGenerator
 	private Random r;
 	private List<Marker> massMarkerList;
 	private bool generationDone;
-	private int lastMassId;
+    Stack<int> availableMassSpotIds;
 	private float waterElevation;
 	private bool _allowUnderwaterMassSpots;
 	private List<Marker> startingPositionList;
+    private double maxPossibleDistance;
 	public bool AllowUnderwaterMassSpots {
 		get { return _allowUnderwaterMassSpots; }
 		set { _allowUnderwaterMassSpots = value; }
@@ -47,10 +48,16 @@ public class MassSpotGenerator
 		hMap = h;
 		this.r = new Random(rngSeed);
 		this.generationDone = false;
-		lastMassId = 1;
 		waterElevation = mapWaterElevation;
 		AllowUnderwaterMassSpots = true;
 		startingPositionList = startPositionList;
+        maxPossibleDistance = Math.Sqrt((hMap.Width * hMap.Width) + (hMap.Height * hMap.Height));
+
+        availableMassSpotIds = new Stack<int>();
+        for (int k = 1024; k > 0; k--)
+        {
+             availableMassSpotIds.Push(k);
+        }
 	}
 	public List<Marker> GetFinalMassSpotList()
 	{
@@ -63,39 +70,43 @@ public class MassSpotGenerator
 	public int MassSpotCount {
 		get { return massMarkerList.Count; }
 	}
-	public void AddStartLocationMassSpots()
+    public void AddStartLocationMassSpots()
 	{
 		if (MassSpotCount > 0) {
 			throw new InvalidOperationException("Starting location mass spots can only be added to an empty mass spot list.");
 		}
 		foreach (Marker startPoint in startingPositionList) {
 			if (startPoint.Name.StartsWith("ARMY_")) {
-				MassMarker ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                int mId = availableMassSpotIds.Pop();
+                MassMarker ms = new MassMarker("Mass " + mId.ToString("D3"));
+                ms.MassSpotNumber = mId;
 				float iX = startPoint.Position.X;
                 float iY = startPoint.Position.Z;
 
                 ms.Position = new Vector3((iX + 4), (float)hMap.GetFAHeight((int)(iX + 4), (int)iY),iY);
                 ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
-				lastMassId = lastMassId + 1;
 
-				ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                mId = availableMassSpotIds.Pop();
+                ms = new MassMarker("Mass " + mId.ToString("D3"));
+                ms.MassSpotNumber = mId;
                 ms.Position = new Vector3((iX - 4), (float)hMap.GetFAHeight((int)(iX - 4), (int)iY), iY);
                 ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
-				lastMassId = lastMassId + 1;
 
-				ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                mId = availableMassSpotIds.Pop();
+                ms = new MassMarker("Mass " + mId.ToString("D3"));
+                ms.MassSpotNumber = mId;
                 ms.Position = new Vector3(iX, (float)hMap.GetFAHeight((int)iX, (int)(iY + 4)), iY + 4);
                 ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
-				lastMassId = lastMassId + 1;
 
-				ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                mId = availableMassSpotIds.Pop();
+                ms = new MassMarker("Mass " + mId.ToString("D3"));
+                ms.MassSpotNumber = mId;
                 ms.Position = new Vector3(iX, (float)hMap.GetFAHeight((int)iX, (int)(iY - 4)), iY - 4);
                 ms.IsStartingMassSpot = true;
 				massMarkerList.Add(ms);
-				lastMassId = lastMassId + 1;
 			}
 		}
 	}
@@ -109,6 +120,11 @@ public class MassSpotGenerator
 		int tries = 0;
 		bool placed = false;
 		Point p = Point.Empty;
+        double[] distanceArray = new double[MassSpotsPerStartLocation];
+        for (int m = 0; m < MassSpotsPerStartLocation; m++)
+        {
+            distanceArray[m] = r.NextDouble() * (MaxDistance - MinDistance) + MinDistance;
+        }
 		for (int k = 0; k <= startingPositionList.Count - 1; k++) {
 			int iX = (int)startingPositionList[k].Position.X;
 			int iY = (int)startingPositionList[k].Position.Z;
@@ -118,7 +134,7 @@ public class MassSpotGenerator
 				tries = 0;
 
 				while (!placed & tries < MaxAttemptsPerMassSpot) {
-					radius = r.NextDouble() * (MaxDistance - MinDistance) + MinDistance;
+                    radius = distanceArray[i - 1];
 					theta = r.NextDouble() * Math.PI * 2;
 					a = (int)(Math.Round(radius * Math.Cos(theta)) + iX);
 					b = (int)(Math.Round(radius * Math.Sin(theta)) + iY);
@@ -127,10 +143,12 @@ public class MassSpotGenerator
 						Rectangle rect = new Rectangle(a - windowSize / 2, b - windowSize / 2, windowSize, windowSize);
 						p = FindSuitableLocation(rect, 0);
 						if (!p.Equals(Point.Empty)) {
-							MassMarker ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                            int mId = availableMassSpotIds.Pop();
+                            MassMarker ms = new MassMarker("Mass " + mId.ToString("D3"));
+                            ms.MassSpotNumber = mId;
+                            ms.IsStartingMassSpot = true;
                             ms.Position = new Vector3((float)(p.X + 0.5), (float)hMap.GetFAHeight(p.X, p.Y), (float)(p.Y + 0.5));
-							massMarkerList.Add(ms);
-							lastMassId = lastMassId + 1;
+							massMarkerList.Add(ms);						
 							placed = true;
 						}
 					}
@@ -142,6 +160,43 @@ public class MassSpotGenerator
 			}
 		}
 	}
+
+    public List<Marker> RemoveRandomDisributionMassSpots()
+    {
+        List<Marker> rtVal = new List<Marker>();
+
+        int currIndex = 0;
+        while (currIndex < massMarkerList.Count)
+        {
+            MassMarker mm = (MassMarker)massMarkerList[currIndex];
+            if (!mm.IsStartingMassSpot)
+            {
+                availableMassSpotIds.Push(mm.MassSpotNumber);
+                rtVal.Add(mm);
+                massMarkerList.RemoveAt(currIndex);
+                currIndex--;
+            }
+            currIndex++;
+        }
+        return rtVal;
+    }
+    public void AddRandomDisributionMassSpots(List<Marker> listToAdd)
+    {
+        foreach (MassMarker mm in listToAdd)
+        {
+            if (!mm.IsStartingMassSpot)
+            {
+                int mId = availableMassSpotIds.Pop();
+                MassMarker ms = new MassMarker("Mass " + mId.ToString("D3"));
+                ms.MassSpotNumber = mId;
+                ms.MassSpotScoreMatrix = mm.MassSpotScoreMatrix;
+                ms.Position = mm.Position;
+                
+                massMarkerList.Add(ms);
+            }
+        }        
+    }
+
     public void BuildRandomDisributionMassSpotList(int massSpots, int minDistanceFromStartPoint)
 	{
         int placedCount = 0;
@@ -152,10 +207,12 @@ public class MassSpotGenerator
 			Point p = FindSuitableLocation(rect, minDistanceFromStartPoint);
 			if (!p.Equals(Point.Empty))
             {
-				MassMarker ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                int mId = availableMassSpotIds.Pop();
+                MassMarker ms = new MassMarker("Mass " + mId.ToString("D3"));
+                ms.MassSpotNumber = mId;
                 ms.Position = new Vector3((float)(p.X + 0.5), (float)hMap.GetFAHeight(p.X, p.Y), (float)(p.Y + 0.5));
+                ms.MassSpotScoreMatrix = GetFairnessMatrixByPoint(new PointF((float)(p.X + 0.5), (float)(p.Y + 0.5)));
 				massMarkerList.Add(ms);
-				lastMassId++;
                 placedCount++;
 			}
             loopCount++;
@@ -178,10 +235,12 @@ public class MassSpotGenerator
 						Rectangle rect = new Rectangle(i - windowSize / 2, j - windowSize / 2, windowSize, windowSize);
 						Point p = FindSuitableLocation(rect, minDistanceFromStartPoint);
 						if (!p.Equals(Point.Empty)) {
-							MassMarker ms = new MassMarker("Mass " + lastMassId.ToString("D3"));
+                            int mId = availableMassSpotIds.Pop();
+                            MassMarker ms = new MassMarker("Mass " + mId.ToString("D3"));
+                            ms.MassSpotNumber = mId;
                             ms.Position = new Vector3((float)(p.X + 0.5), (float)hMap.GetFAHeight(p.X, p.Y), (float)(p.Y + 0.5));
+                            ms.MassSpotScoreMatrix = GetFairnessMatrixByPoint(new PointF((float)(p.X + 0.5), (float)(p.Y + 0.5)));
 							massMarkerList.Add(ms);
-							lastMassId = lastMassId + 1;
 						} else {
 							//Console.WriteLine("Warning: Placement of a mass spot failed in the range " + rect.Left + ", " + rect.Top + " " + rect.Right + ", " + rect.Bottom + ".");
 						}
@@ -273,22 +332,7 @@ public class MassSpotGenerator
         }
 		return result;
 	}
-	public static List<Marker> RemoveDuplicateMassSpots(List<Marker> listToCheck)
-	{
-		List<Marker> rtVal = new List<Marker>();
-		for (int i = 0; i <= listToCheck.Count - 1; i++) {
-			if ((listToCheck[i]) is MassMarker) {
-				MassMarker a = (MassMarker)listToCheck[i];
-				bool b = IsMassSpotCollision(a.Position.X, a.Position.Z, listToCheck, i + 1);
-				if (b) {
-					rtVal.Add(listToCheck[i]);
-				}
-			} else {
-				rtVal.Add(listToCheck[i]);
-			}
-		}
-		return rtVal;
-	}
+
 	private bool IsMassSpotCollision(float x, float y)
 	{
 		return MassSpotGenerator.IsMassSpotCollision(x, y, massMarkerList, 0);
@@ -341,11 +385,246 @@ public class MassSpotGenerator
 		double b = Convert.ToDouble(point2.Y - point1.Y);
 		return Math.Sqrt(a * a + b * b);
 	}
+    private List<double> GetFairnessMatrixByPoint(PointF position)
+    {
+        List<double> rtVal = new List<double>();
+
+        for (int k = 0; k < startingPositionList.Count; k++)
+        {
+            PointF sp = new PointF(startingPositionList[k].Position.X, startingPositionList[k].Position.Z);
+            rtVal.Add(GetDistance(position, sp));
+        }
+        return rtVal;
+    }
+    private Point FindNearestLand(Point startingPoint)
+    {
+        int maxDimension = Math.Max(hMap.Width, hMap.Height);
+        for (int i = 1; i < 2 * maxDimension; i++)
+        {
+            double increment = Math.Acos(Math.Sqrt(2) / (2 * i));
+            for (double j = 0; j < 2 * Math.PI; j += increment)
+            {
+                int tX = (int)(Math.Cos(j) * i + startingPoint.X);
+                int tY = (int)(Math.Sin(j) * i + startingPoint.Y);
+                if (tX > 0 && tX < hMap.Width && tY > 0 && tY < hMap.Height)
+                {
+                    if (!IsWater(tX, tY))
+                    {
+                        Point p = FindSuitableLocation(new Rectangle(tX - 8, tY - 8, 16, 16), 0);
+                        if (p != Point.Empty)
+                        {
+                            return p;
+                        }
+                    }
+                }
+            }
+        }
+        return Point.Empty;
+    }
+    private Point FindIdealPlacementSpot(int idx, int collarSize)
+    {
+        double[] sm = GetScoreMatrix(idx);
+        Rectangle sArea = new Rectangle(collarSize, collarSize, hMap.Width - 2*collarSize, hMap.Height - 2*collarSize);
+
+        while (sArea.Width > 16)
+        {
+            PointF p1 = new PointF(sArea.Width / 4 + sArea.X, sArea.Height / 4 + sArea.Y);
+            PointF p2 = new PointF((3 * sArea.Width) / 4 + sArea.X, sArea.Height / 4 + sArea.Y);
+            PointF p3 = new PointF((3 * sArea.Width) / 4 + sArea.X, (3 * sArea.Height) / 4 + sArea.Y);
+            PointF p4 = new PointF(sArea.Width / 4 + sArea.X, (3 * sArea.Height) / 4 + sArea.Y);
+
+            double s1 = GetScoreMetric(sm, GetFairnessMatrixByPoint(p1));
+            double s2 = GetScoreMetric(sm, GetFairnessMatrixByPoint(p2));
+            double s3 = GetScoreMetric(sm, GetFairnessMatrixByPoint(p3));
+            double s4 = GetScoreMetric(sm, GetFairnessMatrixByPoint(p4));
+
+            if (s1 > s2 && s1 > s3 && s1 > s4)
+            {
+                sArea.Height = sArea.Height / 2;
+                sArea.Width = sArea.Width / 2;
+            }
+            else if (s2 > s3 && s2 > s4)
+            {
+                int temp1 = sArea.Width;
+                sArea.Height = sArea.Height / 2;
+                sArea.Width = sArea.Width / 2;
+                sArea.X = sArea.X + temp1 / 2;
+                
+            }
+            else if (s3 > s4)
+            {
+                int temp1 = sArea.Width;
+                int temp2 = sArea.Height;
+                sArea.Height = sArea.Height / 2;
+                sArea.Width = sArea.Width / 2;
+                sArea.X = sArea.X + temp1 / 2;
+                sArea.Y = sArea.Y + temp2 / 2;
+            }
+            else if(s4 > 0)
+            {
+                int temp2 = sArea.Height;
+                sArea.Height = sArea.Height / 2;
+                sArea.Width = sArea.Width / 2;
+                sArea.Y = sArea.Y + temp2 / 2;
+            }
+            else
+            {
+                int temp1 = sArea.Width;
+                int temp2 = sArea.Height;
+                sArea.Height = sArea.Height / 2;
+                sArea.Width = sArea.Width / 2;
+                sArea.X = sArea.X + temp1 / 4;
+                sArea.Y = sArea.Y + temp2 / 4;
+            }
+        }
+        Point iP = new Point(sArea.X + sArea.Width / 2, sArea.Y + sArea.Height / 2);
+        if (!this.AllowUnderwaterMassSpots)
+        {
+            iP = FindNearestLand(iP);
+        }
+        return iP;
+    }    
+    
+    private int GetWorstMassScoreIndex()
+    {
+        int worstIdx = -1;
+        double worstScore = double.MaxValue;
+
+        for (int j = 0; j < massMarkerList.Count; j++)
+        {
+            MassMarker mm = (MassMarker)massMarkerList[j];
+            if (!mm.IsStartingMassSpot)
+            {
+                double msf = mm.GetMassSpotFairness();
+                if (msf >= 0 && msf < worstScore)
+                {
+                    worstScore = msf;
+                    worstIdx = j;
+                }
+            }
+        }
+        return worstIdx;
+    }
+    private double[] GetScoreMatrix(int excludedIndex)
+    {
+        double[] scoreMatrix = new double[startingPositionList.Count];
+        for (int i = 0; i < massMarkerList.Count; i++)
+        {
+            MassMarker mm = (MassMarker)massMarkerList[i];
+            if (mm.MassSpotScoreMatrix.Count > 0 && i != excludedIndex && !mm.IsStartingMassSpot)
+            {
+                for (int k = 0; k <= startingPositionList.Count - 1; k++)
+                {
+                    scoreMatrix[k] += mm.MassSpotScoreMatrix[k];
+                }
+            }
+        }
+        return scoreMatrix;
+    }
+    private double GetScoreMetric(double[] scoreMatrix, List<double> additionalValue)
+    {
+        double[] tempScoreMatrix = new double[startingPositionList.Count];
+        Array.Copy(scoreMatrix, tempScoreMatrix, startingPositionList.Count);
+
+        if (additionalValue != null && additionalValue.Count > 0)
+        {
+            for (int k = 0; k <= startingPositionList.Count - 1; k++)
+            {
+                tempScoreMatrix[k] += additionalValue[k];
+            }
+        }
+
+        double min = double.MaxValue;
+        double max = double.MinValue;
+
+        for (int k = 0; k <= startingPositionList.Count - 1; k++)
+        {
+            min = Math.Min(min, tempScoreMatrix[k]);
+            max = Math.Max(max, tempScoreMatrix[k]);
+        }
+        return 1.0 - ((max - min)/max);
+    }
+
+
+    public void ImproveMassSpotFairness(int iterations, int attemptsPerMassSpot)
+    {
+        attemptsPerMassSpot = 1;
+        int windowSize = 32;
+        int a;
+        int b;
+        double fs = -1 ;
+
+        List<int> massSpotsToFix = new List<int>();
+        for (int j = 0; j < massMarkerList.Count; j++)
+        {
+            MassMarker mm = (MassMarker)massMarkerList[j];
+            if (!mm.IsStartingMassSpot)
+            {
+                massSpotsToFix.Add(j);
+            }
+        }
+
+        int i = 0;
+        while(i < iterations && i < massSpotsToFix.Count)
+        {
+            int idx = massSpotsToFix[r.Next(0, massSpotsToFix.Count)];
+
+            double[] sm = GetScoreMatrix(idx);
+            double cs = GetScoreMetric(sm, ((MassMarker)massMarkerList[idx]).MassSpotScoreMatrix);
+            Console.WriteLine(i.ToString() + ": " + cs.ToString());
+            if (i == 0)
+            {
+                Console.WriteLine("Start: " + cs.ToString());
+            }
+
+            Vector3 bestSpot = new Vector3();
+            double bestScore = cs;
+            List<double> bestMatrix = new List<double>();
+            Point pI = FindIdealPlacementSpot(idx, windowSize/2);
+            //a = r.Next(2, hMap.Width - 2);
+            //b = r.Next(2, hMap.Height - 2);
+            a = pI.X;
+            b = pI.Y;
+
+            if (!(a - windowSize / 2 < 0 | a + windowSize / 2 > hMap.Width | b - windowSize / 2 < 0 | b + windowSize / 2 > hMap.Height))
+            {
+                Rectangle rect = new Rectangle(a, b - windowSize / 2, windowSize, windowSize);
+                Point p = FindSuitableLocation(rect, 10);
+                if (!p.Equals(Point.Empty))
+                {
+                    PointF pF = new PointF((float)p.X + 0.5f, (float)p.Y + 0.5f);
+                    List<double> fm = GetFairnessMatrixByPoint(pF);
+                    fs = GetScoreMetric(sm, fm);
+                    if (fs > bestScore)
+                    {
+                        bestScore = fs;
+                        bestSpot = new Vector3(pF.X, (float)hMap.GetFAHeight(p.X, p.Y), pF.Y);
+                        bestMatrix = fm;
+                    }
+                }
+            }
+
+            if (bestScore > cs)
+            {
+                ((MassMarker)massMarkerList[idx]).MassSpotScoreMatrix = bestMatrix;
+                massMarkerList[idx].Position = bestSpot;
+            }
+            i++;
+        }
+        Console.WriteLine("End: " + fs.ToString());
+    }
+
     public double MassSpotFairnessScore()
     {
         double rt = 0;
         double[] distScore = new double[startingPositionList.Count];
         int massSpotCount = 0;
+
+        //for (int j = 0; j < massMarkerList.Count; j++)
+        //{
+        //    ((MassMarker)massMarkerList[j]).MassSpotScoreMatrix.Clear();
+        //}
+
         for (int k = 0; k <= startingPositionList.Count - 1; k++)
         {
             distScore[k] = 0;
@@ -356,6 +635,7 @@ public class MassSpotGenerator
                 if (!mm.IsStartingMassSpot)
                 {
                     distScore[k] += GetDistance(new PointF(mm.Position.X, mm.Position.Z), sp);
+                    //mm.MassSpotScoreMatrix.Add(distScore[k]);
                     massSpotCount++;
                 }
             }
@@ -366,6 +646,47 @@ public class MassSpotGenerator
         for (int k = 0; k <= startingPositionList.Count - 1; k++)
         {
             distScore[k] = distScore[k] / massSpotCount;
+            minScore = Math.Min(distScore[k], minScore);
+            maxScore = Math.Max(distScore[k], maxScore);
+        }
+        rt = Math.Max(0, 1.0 - ((maxScore - minScore) / minScore));
+
+        return rt;
+    }
+
+    public double PrintMassSpotFairnessScores()
+    {
+        double rt = 0;
+        double[] distScore = new double[startingPositionList.Count];
+        int massSpotCount = 0;
+
+        //for (int j = 0; j < massMarkerList.Count; j++)
+        //{
+        //    ((MassMarker)massMarkerList[j]).MassSpotScoreMatrix.Clear();
+        //}
+
+        for (int k = 0; k <= startingPositionList.Count - 1; k++)
+        {
+            distScore[k] = 0;
+            PointF sp = new PointF(startingPositionList[k].Position.X, startingPositionList[k].Position.Z);
+            foreach (MassMarker mm in massMarkerList)
+            {
+                //Exclude starting mass spots for scoring purposes.
+                if (!mm.IsStartingMassSpot)
+                {
+                    distScore[k] += GetDistance(new PointF(mm.Position.X, mm.Position.Z), sp);
+                    //mm.MassSpotScoreMatrix.Add(distScore[k]);
+                    massSpotCount++;
+                }
+            }
+        }
+        double minScore = double.MaxValue;
+        double maxScore = double.MinValue;
+
+        for (int k = 0; k <= startingPositionList.Count - 1; k++)
+        {
+            distScore[k] = distScore[k] / massSpotCount;
+            Console.WriteLine(k.ToString() + ": " + distScore[k].ToString());
             minScore = Math.Min(distScore[k], minScore);
             maxScore = Math.Max(distScore[k], maxScore);
         }

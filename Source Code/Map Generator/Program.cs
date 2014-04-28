@@ -70,7 +70,7 @@ static class Program
         Console.WriteLine(argTilesetPath);
         Console.Write("Choosing Tileset...");
         Tileset ts = Tileset.GetRandomTileset(argTilesetPath, r);
-        Console.WriteLine(" Done.");
+        Console.WriteLine(" Done.  (" + ts.Name + ")");
 
         //Load Start Positions
         Console.Write("Loading Start Position Data...");
@@ -93,7 +93,7 @@ static class Program
         PropGenerator pg = new PropGenerator(Program.MapHeightData, ts, argInputPath, m.Water.Elevation, r.Next());
         Program.timeStamp = DateTime.Now;
         Console.Write("  - Adding Rocks...");
-        int rockCount = pg.PlaceRocksAroundStartPositions(r.Next(2000, 5000), 30, 70, sList);
+        int rockCount = pg.PlaceRocksAroundStartPositions(r.Next(1000, 5000), 30, 70, sList);
         Console.WriteLine(" Done. " + GetTimeStampDifference() + " Created " + rockCount + " rocks.");
 
         Console.Write("  - Adding Trees...");
@@ -104,33 +104,56 @@ static class Program
 
         //Mass Spots
         Console.Write("Adding Mass Spots...");
-        int TotalAttempts = 50;
-        int bestIndex = 0;
+        int TotalAttempts = 200;       
         double bestScore = 0;
-        MassSpotGenerator[] mSpotStore = new MassSpotGenerator[TotalAttempts];
-        int massDensityA = r.Next(0, 7);
-        int massDensityB = r.Next(0, 8);
+        
+        int massDensityA = r.Next(0, 5);
+        int massDensityB = r.Next(0, 7);
+
+        MassSpotGenerator mSpotGen = new MassSpotGenerator(Program.MapHeightData, m.Water.Elevation, sList, r.Next());
+        mSpotGen.AllowUnderwaterMassSpots = false;
+        mSpotGen.AddStartLocationMassSpots();
+        mSpotGen.AddStartLocationBasedMassSpots(massDensityA, 8, 60);
+        List<Marker> tempListMS = new List<Marker>();
         for(int i= 0; i < TotalAttempts; i++)
         {
-            mSpotStore[i] = new MassSpotGenerator(Program.MapHeightData, m.Water.Elevation, sList, r.Next());
-            mSpotStore[i].AllowUnderwaterMassSpots = false;
-            mSpotStore[i].AddStartLocationMassSpots();
-            mSpotStore[i].AddStartLocationBasedMassSpots(massDensityA, 8, 60);
-            mSpotStore[i].BuildRandomDisributionMassSpotList(sList.Count * massDensityB, 60);
-            double thisScore = mSpotStore[i].MassSpotFairnessScore();
+            mSpotGen.BuildRandomDisributionMassSpotList(sList.Count * massDensityB, 60);
+
+            double thisScore = mSpotGen.MassSpotFairnessScore();
             if (thisScore > bestScore)
             {
+                tempListMS = mSpotGen.RemoveRandomDisributionMassSpots();
                 bestScore = thisScore;
-                bestIndex = i;
             }
+            else
+            {
+                mSpotGen.RemoveRandomDisributionMassSpots();
+            }
+
             if (bestScore > .97)
             {
                 break;
             }
         }
-        List<Marker> mList = mSpotStore[bestIndex].GetFinalMassSpotList();
+        mSpotGen.AddRandomDisributionMassSpots(tempListMS);       
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count), 1);
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count) / 2, 1);
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count) / 3, 1);
+
+        List<Marker> mList = mSpotGen.GetFinalMassSpotList();
+
+        for (int j = 0; j < mList.Count; j++)
+        {
+            MassMarker mm = (MassMarker)mList[j];
+            if (mm.MassSpotScoreMatrix.Count > 0)
+            {
+                Console.WriteLine(mm.Name + ": " + mm.GetMassSpotFairness());
+            }
+        }
+        mSpotGen.PrintMassSpotFairnessScores();
+        double mScore = mSpotGen.MassSpotFairnessScore();
         m.MarkerList.AddRange(mList);
-        Console.WriteLine(" " + mList.Count + " mass spots added.  Placement Score is " + (100 * bestScore).ToString() + "%" );
+        Console.WriteLine(" " + mList.Count + " mass spots added.  Placement Score is " + (100 * mScore).ToString() + "%");
 
         //Generate Scenario File
         Console.WriteLine("Creating Scenario File...");
