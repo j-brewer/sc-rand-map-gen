@@ -98,7 +98,6 @@ function Generate(){
 	local beachSize = 24;
 	
 	local islandShape = rand() % 3;
-	islandShape = 0;
 	if(islandShape == 0)
 	{
 		islandTile.RadialGradient(islandSize, islandSize, islandSize - beachSize, islandHeight, islandHeight, false);

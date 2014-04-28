@@ -60,33 +60,43 @@ function Generate(){
 	
 	GGen_IncreaseProgress();
 
-	local base = GGen_Data_2D(width, height,9000);
+	local base = GGen_Data_2D(width, height,7500);
 	
 	//base.RadialGradientFromProfile(size, size, 400, profile, false);
 	local valleyCount = 7
 	local stepSize = width/valleyCount;
 	local valleySize = height/(valleyCount * 4);
+		
 	for(local i = 0; i < valleyCount+1; i++)
 	{
 		local x1 = (i * stepSize - valleySize >= 0) ? i * stepSize - valleySize : 0;
 		local x2 = (i * stepSize + valleySize < width) ? i * stepSize + valleySize : width-1;
-		base.SetValueInRect(x1, 0, x2, height-1, 3500);
+		base.SetValueInRect(x1, 0, x2, height-1, 3300);
 	}
 	for(local i =0; i < valleyCount +1; i++)
 	{
 		local y1 = (i * stepSize - valleySize >= 0) ? i * stepSize - valleySize : 0;
 		local y2 = (i * stepSize + valleySize < height) ? i * stepSize + valleySize : height-1;
-		base.SetValueInRect(0, y1, width-1, y2, 3500);
+		base.SetValueInRect(0, y1, width-1, y2, 3300);
 	}
+	
+	local waterDepth = 1500;
+	local waterTransition = valleySize / 8;
+	local y1 = (height/2 - valleySize + waterTransition);
+	local y2 = (height/2 + valleySize - waterTransition);
+	base.SetValueInRect(0, y1, width-1, y2, waterDepth);
+	base.Gradient(0, y1, 0, y1 - waterTransition -1, waterDepth, 3300, false);
+	base.Gradient(0, y2, 0, y2 + waterTransition, waterDepth, 3300, false);
 	
 	for(local i = 0; i < startPos.GetWidth() - 1; i=i+1)
 	{
 		local x1 = startPos.GetValue(i,0);
 		local y1 = startPos.GetValue(i,1);
-		base.RadialGradient(x1, y1, 96, 3500, 3500, false);
+		base.RadialGradient(x1, y1, 96, 3300, 3300, false);
 	}
 	
-	base.Smooth(25);
+	
+	base.Smooth(20);
 	
 	base.Distort(96, 80);
 	base.Smooth(3);
