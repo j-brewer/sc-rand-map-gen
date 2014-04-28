@@ -56,7 +56,7 @@ public class MapGenerator
 
         m.Water.SunReflection = GetRandomWaterSunReflection(r);
         m.Water.UnitReflection = m.Water.SunReflection;
-        m.Water.SkyReflection = m.Water.SunReflection / 2.0f;
+        m.Water.SkyReflection = (float)Math.Max(m.Water.SunReflection / 2.0f, 0.25);
 
         m.Water.SunShininess = GetRandomWaterSunShininess(r);
         m.Water.SunStrength = 12.5f;
