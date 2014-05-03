@@ -431,4 +431,89 @@
       <Prop>/env/tropical/props/rocks/rock05_prop.bp</Prop>
     </Props>
   </Tileset>
+  <Tileset name="Custom-RedBarrens-01">
+    <Stratum0>
+      <TexturePath>/env/red barrens/layers/rb_redmud_albedo.dds</TexturePath>
+      <TextureScale>4.5</TextureScale>
+      <NormalPath>/env/red barrens/layers/rb_sand_normal.dds</NormalPath>
+      <NormalScale>15.25</NormalScale>
+    </Stratum0>
+    <Stratum1>
+      <TexturePath>/env/red barrens/layers/rb_gravel01_albedo.dds</TexturePath>
+      <TextureScale>1</TextureScale>
+      <NormalPath>/env/red barrens/layers/rb_cracked_normal.dds</NormalPath>
+      <NormalScale>8.75</NormalScale>
+    </Stratum1>
+    <Stratum2>
+      <TexturePath>/env/red barrens/layers/rb_cracked_albedo.dds</TexturePath>
+      <TextureScale>25</TextureScale>
+      <NormalPath>/env/red barrens/layers/rb_cracked_normal.dds</NormalPath>
+      <NormalScale>25</NormalScale>
+    </Stratum2>
+    <Stratum3>
+      <TexturePath>/env/red barrens/layers/rb_sandwet_albedo.dds</TexturePath>
+      <TextureScale>4</TextureScale>
+      <NormalPath>/env/red barrens/layers/rb_sandwet_normal.dds</NormalPath>
+      <NormalScale>28.5</NormalScale>
+    </Stratum3>
+    <Stratum4>
+      <TexturePath>/env/desert/layers/des_sanddark_albedo.dds</TexturePath>
+      <TextureScale>9.5</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
+      <NormalScale>15.75</NormalScale>
+    </Stratum4>
+    <Stratum5>
+      <TexturePath>/env/red barrens/layers/rb_rock_albedo.dds</TexturePath>
+      <TextureScale>7.25</TextureScale>
+      <NormalPath>/env/red barrens/layers/rb_rock_normal.dds</NormalPath>
+      <NormalScale>53.25</NormalScale>
+    </Stratum5>
+    <Stratum6>
+      <TexturePath>/env/red barrens/layers/rb_sand_albedo.dds</TexturePath>
+      <TextureScale>30</TextureScale>
+      <NormalPath>/env/red barrens/layers/rb_rock_normal.dds</NormalPath>
+      <NormalScale>42.75</NormalScale>
+    </Stratum6>
+    <Stratum7>
+      <TexturePath>/env/red barrens/layers/rb_rock02_albedo.dds</TexturePath>
+      <TextureScale>27.25</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock_normal.dds</NormalPath>
+      <NormalScale>27.25</NormalScale>
+    </Stratum7>
+    <Stratum8>
+      <TexturePath>/env/red barrens/layers/rb_rock03_albedo.dds</TexturePath>
+      <TextureScale>37</TextureScale>
+      <NormalPath>/env/desert/layers/des_rock03a_normal.dds</NormalPath>
+      <NormalScale>37</NormalScale>
+    </Stratum8>
+    <Stratum9>
+      <TexturePath>/env/red barrens/layers/macrotexture001_albedo.dds</TexturePath>
+      <TextureScale>103.5</TextureScale>
+      <NormalPath />
+      <NormalScale>15.25</NormalScale>
+    </Stratum9>
+    <Props>
+      <Prop>/env/redrocks/props/searock01_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/redtree01_s1_prop.bp</Prop>
+      <Prop>/env/redrocks/props/pod02_prop.bp</Prop>
+      <Prop>/env/redrocks/props/pod03_prop.bp</Prop>
+      <Prop>/env/redrocks/props/boulder01_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/carotenoid01_s2_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/groups/redtree01_group1_prop.bp</Prop>
+      <Prop>/env/redrocks/props/boulder03_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/groups/redtree01_group2_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/groups/carotenoid01_group2_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/redtree01_s2_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/groups/carotenoid01_group1_prop.bp</Prop>
+      <Prop>/env/redrocks/props/rock03_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/carotenoid01_s1_prop.bp</Prop>
+      <Prop>/env/redrocks/props/boulder04_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/carotenoid01_s3_prop.bp</Prop>
+      <Prop>/env/redrocks/props/pod01_prop.bp</Prop>
+      <Prop>/env/redrocks/props/searock02_prop.bp</Prop>
+      <Prop>/env/redrocks/props/trees/redtree01_s3_prop.bp</Prop>
+      <Prop>/env/redrocks/props/boulder06_prop.bp</Prop>
+      <Prop>/env/redrocks/props/boulder05_prop.bp</Prop>
+    </Props>
+  </Tileset>
 </Tilesets>
