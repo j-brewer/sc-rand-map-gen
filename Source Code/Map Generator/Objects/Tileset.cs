@@ -121,11 +121,12 @@ public class Tileset
         {
             XmlNode temp = pList[j];
             string propPath = temp.InnerText.ToLowerInvariant();
-            if (propPath.Contains("tree") | propPath.Contains("log") | propPath.Contains("bush"))
+            string propPathTemp = propPath.Replace("redrocks", "rr");
+            if (propPathTemp.Contains("tree") || propPathTemp.Contains("log") || propPathTemp.Contains("bush") || propPathTemp.Contains("pod"))
             {
                 rt.TreeProps.Add(propPath);
             }
-            else if (propPath.Contains("rock") | propPath.Contains("berg"))
+            else if (propPathTemp.Contains("rock") || propPathTemp.Contains("berg") || propPathTemp.Contains("boulder"))
             {
                 rt.RockProps.Add(propPath);
             }
