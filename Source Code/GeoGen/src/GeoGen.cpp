@@ -353,8 +353,8 @@ bool Save(const short* data, unsigned int width, unsigned int height, const GGen
 
 template <class T>
 T random(T min, T max){
-	double random = (double)rand() / (double) RAND_MAX;
-	T output = min + (T) (random * (double)(max - min));
+	double random = (double)rand() / (double) (RAND_MAX+1);
+	T output = min + (T) (random * (double)((max+1) - min));
 	return output;
 }
 
