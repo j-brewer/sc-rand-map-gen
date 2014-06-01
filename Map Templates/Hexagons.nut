@@ -85,7 +85,7 @@ function Generate(){
 	GGen_IncreaseProgress();
 
 	local base = GGen_Data_2D(width, height,2600);
-	local hexagonSize = mapSize/16;
+	local hexagonSize = mapSize/32 + 32;
 	local v = (sin(PI/3) * hexagonSize).tointeger();
 	local hVCount = mapSize / (2 * v);
 	local hHCount = (mapSize - hexagonSize)  / ((3*hexagonSize / 2));
@@ -174,7 +174,7 @@ function Generate(){
 	posX = mapSize/2 - hHCount * (3*hexagonSize / 2)/2 + (3*hexagonSize / 2)/2; 
 	
 	
-	base.Smooth(5);
+	base.Smooth(mapSize/256);
 	
 	iCount = 0;
 	if((hHCount-1) % 4 == 0)

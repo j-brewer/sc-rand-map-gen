@@ -5,8 +5,8 @@ function GetInfo(info_type){
 		case "description":
 			return "A map with few narrow canyons connecting opposing teams.";
 		case "args":
-			GGen_AddIntArg("width","Width","Width of the map.", 1024, 512, 20000, 1);
-			GGen_AddIntArg("height","Height","Width of the map.", 1024, 512, 20000, 1);
+			GGen_AddIntArg("width","Width","Width of the map.", 1024, 256, 20000, 1);
+			GGen_AddIntArg("height","Height","Width of the map.", 1024, 256, 20000, 1);
 			GGen_AddEnumArg("players","Number of players to fit on map","Affects the number of players on players map.", 2, "2;4;6;8;10;12");
 			GGen_AddEnumArg("feature_size","Feature Size","Size of map noise features.", 1, "Tiny;Medium;Large");
 			GGen_AddEnumArg("canyon_size","Canyon Size","Size of the canyons between the players.", 2, "Tiny;Small;Medium;Large;Very Large");
@@ -40,7 +40,7 @@ function Generate(){
 	local map_rotation = GGen_GetArgValue("rotation") * 90;
 	local player_count = (GGen_GetArgValue("players") + 1) * 2;
 	local canyon_size = GGen_GetArgValue("canyon_size");
-	local flat_space = 96 + GGen_GetArgValue("flat_space") * 16;
+	local flat_space = 32 + height/16 + GGen_GetArgValue("flat_space") * (height/64);
 	
 	GGen_InitProgress(10);
 
@@ -96,6 +96,14 @@ function Generate(){
 	local baseHeight = 3600;
 	local mountainHeight = 8500;
 	local actualCanyonSize = 16 + 8 * (canyon_size + 1);
+	if(actualCanyonSize > width/8)
+	{
+		actualCanyonSize = width/8;
+	}
+	else if(actualCanyonSize > height/8)
+	{
+		actualCanyonSize = height/8;
+	}
 	
 	local base = GGen_Data_2D(width, height, baseHeight);
 	
@@ -136,8 +144,8 @@ function Generate(){
 	
 	lc3.AddPointByCoords(0, ly3);
 	lc3.AddPointByCoords(0, ly3+lcSize);
-	lc3.AddPointByCoords(width-1, ly3+lcSize);
-	lc3.AddPointByCoords(width-1, ly3);
+	lc3.AddPointByCoords(width, ly3+lcSize);
+	lc3.AddPointByCoords(width, ly3);
 	
 	base.FillPolygon(lc3, baseHeight);
 	
@@ -152,8 +160,8 @@ function Generate(){
 	 	 
 	h.AddPointByCoords(x1, 0);
 	h.AddPointByCoords(x2, 0);
-	h.AddPointByCoords(x2, height-1);
-	h.AddPointByCoords(x1, height-1);
+	h.AddPointByCoords(x2, height);
+	h.AddPointByCoords(x1, height);
 	
 	base.FillPolygon(h, waterDepth);
 	base.Gradient(x1-waterTransition, 0, x1, 0, baseHeight, waterDepth, false);
@@ -161,14 +169,19 @@ function Generate(){
 	
 	GGen_IncreaseProgress();
 	
+	local buffer = 96;
+	if(width < 1024 || height < 1024){buffer = 72;}
+	else if(width < 512 || height < 512){buffer = 56;}
+	
+	
+	
 	//Start Position Buffers
 	for(local i = 0; i < startPos.GetWidth() - 1; i=i+1)
 	{
 		local x1 = startPos.GetValue(i,0);
 		local y1 = startPos.GetValue(i,1);
-		base.RadialGradient(x1, y1, 96, baseHeight, baseHeight, false);
+		base.RadialGradient(x1, y1, buffer, baseHeight, baseHeight, false);
 	}
-	
 	
 	base.Smooth(12);
 	base.Distort(96, 80);

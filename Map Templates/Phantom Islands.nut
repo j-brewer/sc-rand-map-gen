@@ -28,14 +28,15 @@ function GetInfo(info_type){
 			return "Generate a cratered landscape.";
 		case "args":
 			GGen_AddIntArg("size","Size of the map","", 1024, 128, 20000, 1);
-			GGen_AddEnumArg("smoothness","Smoothness","Affects amount of detail on the map.", 1, "Very Rough;Rough;Smooth;Very Smooth");			
+			GGen_AddIntArg("players","Number of players to fit on map","Affects the number of paths on map.", 6, 2, 9, 1);
 			GGen_AddEnumArg("island_size","Island Size","Affects the size of islands on the map.", 2, "Very Small;Small;Medium;Large;Very Large");
+			GGen_AddEnumArg("smoothness","Smoothness","Affects amount of detail on the map.", 1, "Very Rough;Rough;Smooth;Very Smooth");			
 			GGen_AddEnumArg("include_land_collar","Land Collar","Affects whether or not the map has a land collar.", 1, "No;Yes");
 			GGen_AddEnumArg("land_collar_size","Land Collar Size","Affects the size of the land collar.", 1, "Very Small;Small;Medium;Large;Very Large");
-			GGen_AddIntArg("players","Number of players to fit on map","Affects the number of paths on map.", 6, 5, 9, 1);
 			GGen_AddIntArg("island_distance_from_center","Island Distance From Center","Affects the distance of the islands from the center of the map.", 8, 0, 16, 1);			
 			GGen_AddEnumArg("include_middle_island","Island In Middle","Affects whether or not the map has an island in the middle.", 0, "No;Yes");
 			GGen_AddEnumArg("middle_island_type","Middle Island Type","Contrls the type of island in the middle of the map.", 0, "Volcano;Flat");
+			GGen_AddEnumArg("rotation","Map Rotation (degrees)","Affects the overall orientation of the map islands.", 0, "0;15;30;45;60;75;90");
 			return 0;
 	}
 }
@@ -69,6 +70,8 @@ function Generate(){
 	local land_collar_size = (GGen_GetArgValue("land_collar_size") + 1) * mapSize /32;
 	local include_middle_island = GGen_GetArgValue("include_middle_island")
 	local middle_island_type = GGen_GetArgValue("middle_island_type")
+	local map_rotation = GGen_GetArgValue("rotation") * (PI/12);
+	
 	
 	
 	
@@ -77,7 +80,7 @@ function Generate(){
 	local posStep = (2.0 * PI) / player_count;
 	for(local i = 0; i < startPos.GetWidth() - 1; i=i+1)
 	{
-		local s = (i * posStep) + (PI/2);
+		local s = (i * posStep) + (PI/2) + map_rotation;
 		local x = ((floor((cos(s) * islandDistance) + 0.5)) + "").tointeger() + (mapSize / 2);
 		local y = ((floor((sin(s) * islandDistance) + 0.5)) + "").tointeger() + (mapSize / 2);
 		
@@ -88,7 +91,7 @@ function Generate(){
 	startPos.SetValue(startPos.GetWidth()-1,1, 16384)
 	
 	//Map Construction
-	local seaLevel = 0;
+	local seaLevel = 1000;
 	local islandHeight = 2800;
 	
 	local base = GGen_Data_2D(mapSize, mapSize, seaLevel);
@@ -187,7 +190,8 @@ function Generate(){
 			
 		}
 	}
-	
+	local angle2 = (floor(map_rotation * (360 / (2.0 * PI))) ).tointeger();
+	islandTile.Rotate(-angle2, true);
 	for(local i = 0; i < startPos.GetWidth() - 1; i=i+1)
 	{
 		local x1 = startPos.GetValue(i,0);
@@ -196,8 +200,6 @@ function Generate(){
 		base.UnionTo(islandTile, x1 - islandTile.GetWidth()/2, y1 - islandTile.GetHeight()/2);
 		islandTile.Rotate(-angle, true);
 	}
-	
-
 
 	base.Smooth(40);
 	base.Distort(islandSize / 4-1, islandSize/4);
@@ -325,6 +327,7 @@ function Generate(){
 	rockMask2.AddMapMasked(rockNoise, rockMask2, true);
 	rockMask2.ScaleValuesTo(0, 512);
 	rockMask2.ReturnAs("RockMask");
+	rockNoise = null;
 	
 	local treeMask = GGen_Data_2D(mapSize, mapSize, 0);
 	
@@ -351,6 +354,7 @@ function Generate(){
 	treeMask.AddMap(slopeMap);
 	treeMask.AddMap(veryhighTerrain);
 	treeMask.Clamp(0, 2400);
+	treeNoise = null;
 	treeMask.ReturnAs("TreeMask");
 	
 	local randomTerrain = GGen_Data_2D(mapSize, mapSize, GGEN_NATURAL_PROFILE.Min());
@@ -371,6 +375,10 @@ function Generate(){
 	randomTerrain.ReturnAs("Stratum1");
 	
 	//Fix Start Positions for team play
+	if(player_count == 4)
+	{	
+		SwapStartLocation(startPos, 1, 2);
+	}
 	if(player_count == 6)
 	{
 		SwapStartLocation(startPos, 4, 5);

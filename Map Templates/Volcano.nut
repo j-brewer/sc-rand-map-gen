@@ -31,18 +31,21 @@ function Generate(){
 	local profile = GGen_Data_1D(320, 0);
 	
 	local a = 40;
-	local s = 128;
-	local t = 221;
+	local s = 160;
+	local t = 198;
 	local u = 260;
 	local slope = 4;
+	local slopeB = 2.0;
 	local heightOffset = 3150;
 	for(local i=1; i <= profile.GetLength(); i = i +1)
 	{
-		if(i < a){profile.SetValue(profile.GetLength() - i, a/slope + i * heightOffset/a);}
-		else if(i >= a && i < s){profile.SetValue(profile.GetLength() - i, i/slope + heightOffset);}
-		else if(i >= s && i < t){profile.SetValue(profile.GetLength() - i, (i-s)*(i-s) + s/slope + heightOffset);}
-		else if(i >= t && i < u){profile.SetValue(profile.GetLength() - i, (i-t)/slope + (t-s)*(t-s) + s/slope + heightOffset);}
-		else{profile.SetValue(profile.GetLength() - i, -1 *(i-t)*(i-t)/2 + (u-t)/slope + (t-s)*(t-s) + s/slope + heightOffset);}
+		local val = 0.0;
+		if(i < a){val = a/slope + i * heightOffset/a;}
+		else if(i >= a && i < s){val = i/slope + heightOffset;}
+		else if(i >= s && i < t){val = (slopeB)*(i-s)*(i-s) + s/slope + heightOffset;}
+		else if(i >= t && i < u){val = (i-t)/slope + (slopeB)*(t-s)*(t-s) + s/slope + heightOffset;}
+		else{val = -1*(slopeB)*(i-u)*(i-u)/2 + (u-t)/slope + (slopeB)*(t-s)*(t-s) + s/slope + heightOffset;}
+		profile.SetValue(profile.GetLength() - i, val.tointeger());
 	}
 	profile.Smooth(6);
 	profile.Smooth(6);
@@ -50,7 +53,7 @@ function Generate(){
 	GGen_IncreaseProgress();
 	
 	local base = GGen_Data_2D(width, height, 0);
-	base.RadialGradientFromProfile(size, size, 400, profile, false);
+	base.RadialGradientFromProfile(size, size, 400, profile, false);	
 	base.Distort(64, 48);
 	base.Distort(128, 100);
 	base.Smooth(6);	
