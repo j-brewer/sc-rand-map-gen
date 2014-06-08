@@ -1,7 +1,7 @@
 //***************************************************************************************
 //* Supreme Commander Random Map Generator
 //* Copyright 2014  Jonathan Brewer
-// * Filename: Program.cs
+//* Filename: Program.cs
 //***************************************************************************************
 //* 
 //* This program is free software; you can redistribute it and/or modify
@@ -137,8 +137,10 @@ static class Program
         }
         mSpotGen.AddRandomDisributionMassSpots(tempListMS);       
         mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count), 1);
-        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count) / 2, 1);
-        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count) / 3, 1);
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count), 1);
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count), 1);
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count), 1);
+        mSpotGen.ImproveMassSpotFairness((massDensityB * sList.Count), 1);
 
         List<Marker> mList = mSpotGen.GetFinalMassSpotList();
 

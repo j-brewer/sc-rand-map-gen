@@ -549,7 +549,7 @@ public class MassSpotGenerator
     public void ImproveMassSpotFairness(int iterations, int attemptsPerMassSpot)
     {
         attemptsPerMassSpot = 1;
-        int windowSize = 32;
+        int windowSize = hMap.Width / 32;
         int a;
         int b;
         double fs = -1 ;

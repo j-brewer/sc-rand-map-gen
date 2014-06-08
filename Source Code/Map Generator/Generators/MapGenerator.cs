@@ -201,7 +201,7 @@ public class MapGenerator
     }
     private static Vector2 GetRandomWaterLerpColor(Random r)
     {
-        return new Vector2((float)(r.NextDouble() / 2.0), (float)(r.NextDouble() / 2.0));
+        return new Vector2((float)(r.NextDouble() / 40.0), (float)(r.NextDouble() / 2.0));
     }
     private static float GetRandomWaterUnitReflection(Random r)
     {
