@@ -44,14 +44,14 @@ static class Program
     {
         WriteConsoleInfo();
         CreateDevice();
-
+        //RunTest();
         string path = Utilities.GetScDir();
         string argInputPath = args[0];
         string argTilesetPath = args[4];
         string argOutputPath = args[3];
         int argHeight = int.Parse(args[1]);
         int argWidth = int.Parse(args[2]);
-
+        
         //Generate Map
         if (args.Length > 5)
         {
@@ -86,7 +86,8 @@ static class Program
         Console.Write("Adding Start Positions...");
         StartLocationGenerator slg = new StartLocationGenerator(Program.MapHeightData, StartPositions, r);
         List<Marker> sList = slg.BuildStartLocationList();
-        m.MarkerList = sList;
+        List<Marker> MarkerList;
+        MarkerList = sList;
         Console.WriteLine(" " + sList.Count + " start positions added.");
 
         //Props
@@ -154,7 +155,7 @@ static class Program
         }
         mSpotGen.PrintMassSpotFairnessScores();
         double mScore = mSpotGen.MassSpotFairnessScore();
-        m.MarkerList.AddRange(mList);
+        MarkerList.AddRange(mList);
         Console.WriteLine(" " + mList.Count + " mass spots added.  Placement Score is " + (100 * mScore).ToString() + "%");
 
         //Generate Scenario File
@@ -173,7 +174,7 @@ static class Program
 
         //Generate Save File
         Console.Write("Creating Save File...");
-        SaveFile sf = new SaveFile(s, m.MarkerList);
+        SaveFile sf = new SaveFile(s, MarkerList);
         sf.SaveScriptFile();
         Console.WriteLine(" Done.");
 
@@ -184,7 +185,7 @@ static class Program
 
         //Save text dump of map information
         Console.Write("Saving map information file...");
-        m.SaveMapInformation(argInputPath + "\\mapdata.txt");
+        m.SaveMapInformation(argInputPath + "\\mapdata.txt", randomSeed);
         Console.WriteLine(" Done.");
 
         //Dump Texture Files
@@ -210,7 +211,7 @@ static class Program
         Console.WriteLine("*******************************************************************************");
         Console.WriteLine("*                                                                             *");
         Console.WriteLine("*                  Supreme Commander Random Map Generator                     *");
-        Console.WriteLine("*                                  v0.1                                       *");
+        Console.WriteLine("*                                  v0.2                                       *");
         Console.WriteLine("*                          Author(s): Duck_42                                 *");
         Console.WriteLine("*                                                                             *");
         Console.WriteLine("*******************************************************************************");
@@ -221,5 +222,10 @@ static class Program
         timeStamp = DateTime.Now;
         TimeSpan elapsedTime = timeStamp.Subtract(lastTimeStamp);
         return "(" + string.Format("{0:0.000}", (elapsedTime.TotalSeconds)) + " seconds)";
+    }
+    public static void RunTest()
+    {
+        m = new Map();
+        m.Load("C:\\Program Files (x86)\\THQ\\Gas Powered Games\\Supreme Commander - Forged Alliance\\maps\\SCMP_040\\SCMP_040.scmap", Device);
     }
 }

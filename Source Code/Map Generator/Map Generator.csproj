@@ -39,7 +39,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\MapGenerator\</OutputPath>
@@ -77,17 +77,6 @@
     <Compile Include="Generators\PropGenerator.cs" />
     <Compile Include="Generators\StartLocationGenerator.cs" />
     <Compile Include="Generators\WaveGenGenerator.cs" />
-    <Compile Include="HazardX SCMAP Code\BinaryReader.cs" />
-    <Compile Include="HazardX SCMAP Code\BinaryWriter.cs" />
-    <Compile Include="HazardX SCMAP Code\Decal.cs" />
-    <Compile Include="HazardX SCMAP Code\DecalGroup.cs" />
-    <Compile Include="HazardX SCMAP Code\Layer.cs" />
-    <Compile Include="HazardX SCMAP Code\Map.cs" />
-    <Compile Include="HazardX SCMAP Code\Prop.cs" />
-    <Compile Include="HazardX SCMAP Code\TerrainDecalType.cs" />
-    <Compile Include="HazardX SCMAP Code\WaterShader.cs" />
-    <Compile Include="HazardX SCMAP Code\WaveGenerator.cs" />
-    <Compile Include="HazardX SCMAP Code\WaveTexture.cs" />
     <Compile Include="Helpers\HeightMapLoader.cs" />
     <Compile Include="Helpers\NormalMapBuilder.cs" />
     <Compile Include="Helpers\PreviewBuilder.cs" />
@@ -127,6 +116,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SCMAP Reader Writer\SCMAP Reader Writer.csproj">
+      <Project>{27095117-074e-4c27-b83f-55d4fdac9554}</Project>
+      <Name>SCMAP Reader Writer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,4 @@
 syntax: glob
-Output/FA Maps/*
-Output/Generated Heightmaps/*
 Source Code/bin/*
 *.sdf
 *.suo
@@ -17,3 +15,5 @@ Source Code/lib/*
 Tilesets/TilesetData-8 Import/*.lua
 Supcom Map Editor.exe - Shortcut.lnk
 GeoGen Studio.exe - Shortcut.lnk
+Source Code/SCMAP Reader Writer/obj/*
+Output/*

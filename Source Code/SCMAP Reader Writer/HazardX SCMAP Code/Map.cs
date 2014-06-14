@@ -263,8 +263,8 @@ public class Map
             {
                 Count = _with1.ReadInt32();
                 //always 1?
-                EnvCubemapsName = new string[Count + 1];
-                EnvCubemapsFile = new string[Count + 1];
+                EnvCubemapsName = new string[Count];
+                EnvCubemapsFile = new string[Count];
                 for (int i = 0; i <= Count - 1; i++)
                 {
                     EnvCubemapsName[i] = _with1.ReadStringNull();
