@@ -11,9 +11,7 @@ using System;
 
 public struct WaterShader
 {
-
-
-    internal bool HasWater;
+    public bool HasWater;
     public float Elevation;
     public float ElevationDeep;
 

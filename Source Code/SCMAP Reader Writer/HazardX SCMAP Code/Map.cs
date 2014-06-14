@@ -46,7 +46,6 @@ public class Map
     public int Width = 0;
     public int Height = 0;
 
-    public List<Marker> MarkerList;
     public string TexPathBackground;
     public string TexPathSkyCubemap;
     public string[] EnvCubemapsName;
@@ -84,10 +83,20 @@ public class Map
     public int Unknown12;
 
     public short Unknown13;
-    public byte[] Unknown5;
     public int Unknown7;
 
     public int Unknown8;
+    public float Unknown14;
+
+    //Minimap Cartographic View Colors (Not in Hazard's Original Code)
+    public int MinimapContourInterval;
+    public Color MinimapDeepWaterColor;
+    public Color MinimapShoreColor;
+    public Color MinimapLandStartColor;
+    public Color MinimapLandEndColor;
+    public Color MinimapContourColor; //Not sure about this one
+    
+
     public void Initialize()
     {
         TerrainTypeData = new byte[Height * Width];
@@ -110,12 +119,20 @@ public class Map
 
         //Unknown Values
 
-        Unknown5 = new byte[24];
         Unknown8 = 0;
         Unknown10 = -1091567891;
         Unknown11 = 2;
         Unknown12 = 0;
         Unknown13 = 0;
+        Unknown14 = 0;
+
+        //Minimap Colors (Default)
+        MinimapContourInterval = 24;
+        MinimapDeepWaterColor = Color.FromArgb(71, 140, 181);
+        MinimapContourColor = Color.FromArgb(112, 112, 112);
+        MinimapShoreColor = Color.FromArgb(140, 201, 224);
+        MinimapLandStartColor = Color.FromArgb(117, 99, 107);
+        MinimapLandEndColor = Color.FromArgb(206, 206, 176);
 
     }
 
@@ -140,8 +157,6 @@ public class Map
 
     public void Clear()
     {
-        Unknown5 = new byte[24];
-
         if (PreviewBitmap != null) { PreviewBitmap.Dispose(); PreviewBitmap = null; }
         if (PreviewTex != null) { PreviewTex.Dispose(); PreviewTex = null; }
         if (TexturemapTex != null) { TexturemapTex.Dispose(); TexturemapTex = null; }
@@ -313,7 +328,17 @@ public class Map
             }
             else
             {
-                Unknown5 = _with1.ReadBytes(24);
+                MinimapContourInterval = _with1.ReadInt32();
+                MinimapDeepWaterColor = Color.FromArgb(_with1.ReadInt32());
+                MinimapContourColor = Color.FromArgb(_with1.ReadInt32());
+                MinimapShoreColor = Color.FromArgb(_with1.ReadInt32());
+                MinimapLandStartColor = Color.FromArgb(_with1.ReadInt32());
+                MinimapLandEndColor = Color.FromArgb(_with1.ReadInt32());
+                
+                if (VersionMinor > 56)
+                {
+                    Unknown14 = _with1.ReadSingle(); //Not sure what this is.
+                }
                 Count = 10;
                 for (int i = 0; i <= Count - 1; i++)
                 {
@@ -437,12 +462,12 @@ public class Map
 
         return true;
     }
-    public void SaveMapInformation(string Filename)
+    public void SaveMapInformation(string Filename, int randomSeed)
     {
         System.IO.StreamWriter fs = new System.IO.StreamWriter(Filename, false);
         fs.WriteLine("FA Map Information");
         fs.WriteLine("----------------------------------------------------------------");
-        fs.WriteLine("    Random Number Seed: " + Program.randomSeed);
+        fs.WriteLine("    Random Number Seed: " + randomSeed);
         fs.WriteLine("    Dimensions: " + this.Width + "x" + this.Height);
         fs.WriteLine("    Map Data Version: " + this.VersionMajor + "." + this.VersionMinor);
         fs.WriteLine("    Height Scale: " + this.HeightScale);
@@ -516,13 +541,13 @@ public class Map
         }
 
         fs.WriteLine("    Unknown Settings");
-        fs.WriteLine("        Unknown Value 5:" + this.Unknown5.ToString());
         fs.WriteLine("        Unknown Value 7:" + this.Unknown7);
         fs.WriteLine("        Unknown Value 8:" + this.Unknown8);
         fs.WriteLine("        Unknown Value 10:" + this.Unknown10);
         fs.WriteLine("        Unknown Value 11:" + this.Unknown11);
         fs.WriteLine("        Unknown Value 12:" + this.Unknown12);
         fs.WriteLine("        Unknown Value 13:" + this.Unknown13);
+        fs.WriteLine("        Unknown Value 14:" + this.Unknown14);
 
         fs.Close();
     }
@@ -638,7 +663,18 @@ public class Map
         }
         else
         {
-            _with2.Write(Unknown5);
+            _with2.Write(MinimapContourInterval);
+            _with2.Write(MinimapDeepWaterColor.ToArgb());
+            _with2.Write(MinimapContourColor.ToArgb());
+            _with2.Write(MinimapShoreColor.ToArgb());
+            _with2.Write(MinimapLandStartColor.ToArgb());
+            _with2.Write(MinimapLandEndColor.ToArgb());
+
+            if (VersionMinor > 56)
+            {
+                _with2.Write(Unknown14);
+            }
+
             for (int i = 0; i <= Layers.Count - 1; i++)
             {
                 Layers[i].SaveAlbedo(Stream);
