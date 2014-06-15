@@ -68,7 +68,7 @@ public class PreviewBuilder
         MemoryStream ms = new MemoryStream();
         bm2.Save(ms, ImageFormat.Png);
         ms.Seek(0, SeekOrigin.Begin);
-        return SlimDX.Direct3D9.Texture.FromStream(Device, ms, bm2.Width, bm2.Height, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.Linear, Filter.Linear, 0);
+        return SlimDX.Direct3D9.Texture.FromStream(Device, ms, bm2.Width, bm2.Height, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.None, Filter.None, 0);
     }
     private Color GetMapColorAtPosition(int x, int y)
     {

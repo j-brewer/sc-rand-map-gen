@@ -46,14 +46,14 @@ public class TexturemapLoader
         MemoryStream ms = new MemoryStream();
         LowerStratumBitmap.Save(ms, ImageFormat.Png);
         ms.Seek(0, SeekOrigin.Begin);
-        LowerStratumTexture = SlimDX.Direct3D9.Texture.FromStream(device, ms, LowerStratumBitmap.Width, LowerStratumBitmap.Height, 0, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.Linear, Filter.Linear, 0);
+        LowerStratumTexture = SlimDX.Direct3D9.Texture.FromStream(device, ms, LowerStratumBitmap.Width, LowerStratumBitmap.Height, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.None, Filter.None, 0);
 
 
         UpperStratumBitmap = LoadTextureBitmap(inputPath, strataSize, 4);
         MemoryStream ms2 = new MemoryStream();
         UpperStratumBitmap.Save(ms2, ImageFormat.Png);
         ms2.Seek(0, SeekOrigin.Begin);
-        UpperStratumTexture = SlimDX.Direct3D9.Texture.FromStream(device, ms2, UpperStratumBitmap.Width, UpperStratumBitmap.Height, 0, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.Linear, Filter.Linear, 0);
+        UpperStratumTexture = SlimDX.Direct3D9.Texture.FromStream(device, ms2, UpperStratumBitmap.Width, UpperStratumBitmap.Height, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.None, Filter.None, 0);
     }
     private static Bitmap LoadTextureBitmap(string inputPath, Point strataSize, int startPoint)
     {

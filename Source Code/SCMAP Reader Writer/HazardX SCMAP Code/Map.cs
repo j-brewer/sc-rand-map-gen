@@ -437,16 +437,16 @@ public class Map
         fs.Close();
         fs.Dispose();
 
-        PreviewTex = Texture.FromMemory(Device, PreviewData);
+        PreviewTex = Texture.FromMemory(Device, PreviewData, 256, 256, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.None, Filter.None, 0);
         PreviewData = new byte[0];
         PreviewBitmap = TextureToBitmap(PreviewTex);
 
-        TexturemapTex = Texture.FromMemory(Device, TexturemapData);
+        TexturemapTex = Texture.FromMemory(Device, TexturemapData, Width / 2, Height / 2, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.None, Filter.None, 0);
         TexturemapData = new byte[0];
 
         if (TexturemapData2.Length > 0)
         {
-            TexturemapTex2 = Texture.FromMemory(Device, TexturemapData2);
+            TexturemapTex2 = Texture.FromMemory(Device, TexturemapData2, Width / 2, Height / 2, 1, Usage.None, Format.A8R8G8B8, Pool.Scratch, Filter.None, Filter.None, 0);
             TexturemapData2 = new byte[0];
         }
         else
@@ -454,10 +454,10 @@ public class Map
             TexturemapTex2 = new Texture(Device, Width / 2, Height / 2, 1, Usage.None, Format.A8R8G8B8, Pool.Managed);
         }
 
-        NormalmapTex = Texture.FromMemory(Device, NormalmapData);
+        NormalmapTex = Texture.FromMemory(Device, NormalmapData, Width, Height, 1, Usage.None, Format.Dxt5, Pool.Scratch, Filter.None, Filter.None, 0);
         NormalmapData = new byte[0];
 
-        WatermapTex = Texture.FromMemory(Device, WatermapData);
+        WatermapTex = Texture.FromMemory(Device, WatermapData, Width / 2, Height / 2,  1, Usage.None, Format.Dxt5, Pool.Scratch, Filter.None, Filter.None, 0);
         WatermapData = new byte[0];
 
         return true;
@@ -589,7 +589,7 @@ public class Map
         //? always 0
         _with2.Write(Unknown13);
         //? always 0
-
+        
         SaveTexture(Stream, PreviewTex);
 
         //# Heightmap Section #

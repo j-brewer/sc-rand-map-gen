@@ -65,6 +65,6 @@ public class NormalMapBuilder
         map.Save(ms, ImageFormat.Png);
         ms.Seek(0, SeekOrigin.Begin);
 
-        return SlimDX.Direct3D9.Texture.FromStream(Device, ms, map.Width, map.Height, 0, Usage.None, Format.Dxt5, Pool.Scratch, Filter.Linear, Filter.Linear, 0);
+        return SlimDX.Direct3D9.Texture.FromStream(Device, ms, map.Width, map.Height, 1, Usage.None, Format.Dxt5, Pool.Scratch, Filter.None, Filter.None, 0);
     }
 }
