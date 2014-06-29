@@ -189,7 +189,11 @@ public class MapGenerator
     }
     private static Vector4 GetRandomSpecularColor(Random r)
     {
-        return Utilities.GetRandomVector4(r);
+        Vector4 v = Utilities.GetRandomVector4(r);
+        //Limit the specular color to .15 Alpha value.  This should prevent the 
+        //the specular lighting from getting out of hand.
+        v.W *= 0.15f;
+        return v;
     }
     private static Vector3 GetRandomSunAmbienceColor(Random r)
     {
