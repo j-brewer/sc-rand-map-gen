@@ -118,6 +118,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SCMAP Preview Builder\SCMAP Preview Builder.csproj">
+      <Project>{a0e1a5fa-b7ce-4df8-a192-b892f61317a1}</Project>
+      <Name>SCMAP Preview Builder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SCMAP Reader Writer\SCMAP Reader Writer.csproj">
       <Project>{27095117-074e-4c27-b83f-55d4fdac9554}</Project>
       <Name>SCMAP Reader Writer</Name>

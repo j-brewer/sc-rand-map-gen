@@ -48,7 +48,7 @@ public class Decal
         Stream.Write(Index);
         Stream.Write(Convert.ToInt32(Type));
         Stream.Write(TexPathes.Length);
-        for (int i = 0; i <= TexPathes.Length; i++)
+        for (int i = 0; i < TexPathes.Length; i++)
         {
             Stream.Write(TexPathes[i].Length);
             Stream.Write(TexPathes[i], false);

@@ -96,7 +96,7 @@ public class Map
     public Color MinimapLandEndColor;
     public Color MinimapContourColor; //Not sure about this one
     
-
+<Merge Conflict>
     public void Initialize()
     {
         TerrainTypeData = new byte[Height * Width];
@@ -483,7 +483,7 @@ public class Map
         fs.WriteLine("        Enviroment Lookup Textures");
         for (int i = 0; i <= this.EnvCubemapsFile.Length - 1; i++)
         {
-            fs.WriteLine("            Texture " + i + 1);
+            fs.WriteLine("            Texture " + (i + 1).ToString());
             fs.WriteLine("                Texture Label: " + this.EnvCubemapsName[i]);
             fs.WriteLine("                Texture Path: " + this.EnvCubemapsFile[i]);
             fs.WriteLine("");
@@ -521,7 +521,7 @@ public class Map
         fs.WriteLine("        Wave Normals");
         for (int i = 0; i <= this.Water.WaveTextures.Length - 1; i++)
         {
-            fs.WriteLine("            Wave Normal " + i + 1);
+            fs.WriteLine("            Wave Normal " + (i + 1).ToString());
             fs.WriteLine("                Texture: " + this.Water.WaveTextures[i].TexPath);
             fs.WriteLine("                Direction Vector: X=" + this.Water.WaveTextures[i].NormalMovement.X + " " + this.Water.WaveTextures[i].NormalMovement.Y);
             fs.WriteLine("                Frequency: " + this.Water.WaveTextures[i].NormalRepeat);
@@ -532,7 +532,7 @@ public class Map
         for (int i = 0; i <= this.Layers.Count - 1; i++)
         {
             Layer stratum = this.Layers[i];
-            fs.WriteLine("        Stratum " + i + 1);
+            fs.WriteLine("        Stratum " + (i + 1).ToString());
             fs.WriteLine("                Texture Path: " + stratum.PathTexture);
             fs.WriteLine("                Texture Scale: " + stratum.ScaleTexture);
             fs.WriteLine("                Normal Map Path: " + stratum.PathNormalmap);

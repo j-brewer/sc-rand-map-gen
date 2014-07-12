@@ -4,20 +4,19 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{27095117-074E-4C27-B83F-55D4FDAC9554}</ProjectGuid>
+    <ProjectGuid>{A0E1A5FA-B7CE-4DF8-A192-B892F61317A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SCMAPReaderWriter</RootNamespace>
-    <AssemblyName>SCMAP Reader Writer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>SCMAPTools</RootNamespace>
+    <AssemblyName>SCMAP Preview Builder</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\SCMAPReaderWriter\</OutputPath>
+    <OutputPath>..\bin\PreviewBuilder\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,47 +25,59 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\SCMAPReaderWriter\</OutputPath>
+    <OutputPath>..\bin\PreviewBuilder\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '.NET v4.0 Release|AnyCPU'">
-    <OutputPath>bin\.NET v4.0 Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SlimDX">
+    <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External References\SlimDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HazardX SCMAP Code\BinaryReader.cs" />
-    <Compile Include="HazardX SCMAP Code\BinaryWriter.cs" />
-    <Compile Include="HazardX SCMAP Code\Decal.cs" />
-    <Compile Include="HazardX SCMAP Code\DecalGroup.cs" />
-    <Compile Include="HazardX SCMAP Code\Layer.cs" />
-    <Compile Include="HazardX SCMAP Code\Map.cs" />
-    <Compile Include="HazardX SCMAP Code\Prop.cs" />
-    <Compile Include="HazardX SCMAP Code\TerrainDecalType.cs" />
-    <Compile Include="HazardX SCMAP Code\WaterShader.cs" />
-    <Compile Include="HazardX SCMAP Code\WaveGenerator.cs" />
-    <Compile Include="HazardX SCMAP Code\WaveTexture.cs" />
+    <Compile Include="PreviewBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TextureLoader.cs" />
+    <Compile Include="Utilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SCMAP Reader Writer\SCMAP Reader Writer.csproj">
+      <Project>{27095117-074e-4c27-b83f-55d4fdac9554}</Project>
+      <Name>SCMAP Reader Writer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BicubicRamp.dds" />
+    <None Include="Resources\FresnelTexture.dds" />
+    <None Include="Resources\ShadowTexture.dds" />
+    <None Include="Resources\terrain.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\water2.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\frame.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

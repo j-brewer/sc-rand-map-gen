@@ -58,7 +58,7 @@ public class Tileset
                 {
                     rt = EnvironmentType.Desert;
                 }
-                else if (envType == "redrock")
+                else if (envType == "redrock" || envType == "red barrens")
                 {
                     rt = EnvironmentType.Redrock;
                 }

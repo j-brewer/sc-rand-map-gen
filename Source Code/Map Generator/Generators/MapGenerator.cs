@@ -142,13 +142,6 @@ public class MapGenerator
         m.NormalmapTex = NormalMapBuilder.ComputeNormalMap(Program.MapHeightData, Device);
         Console.WriteLine(" Done. " + Program.GetTimeStampDifference());
 
-        //Preview Texture
-        Console.Write("  - Building Map Preview...");
-        //m.PreviewTex = GetDummyPreviewTexture(Device)
-        PreviewBuilder pb = new PreviewBuilder(Program.MapHeightData, ts, tml.LowerStratumBitmap, tml.UpperStratumBitmap, m.Water, Device);
-        m.PreviewTex = pb.GetMapPreviewTexture(Device);
-        Console.WriteLine(" Done. " + Program.GetTimeStampDifference());
-
         if (m.Water.HasWater)
         {
             Console.Write("  - Building Wave Generators...");
@@ -156,6 +149,21 @@ public class MapGenerator
             m.WaveGenerators = wgb.BuildWaveGeneratorList(m.Water.Elevation);
             Console.WriteLine(" Done. " + Program.GetTimeStampDifference() + " Created " + m.WaveGenerators.Count + " wave generators.");
         }
+
+        //Preview Texture
+        Console.Write("  - Building Map Preview...");
+        SCMAPTools.PreviewBuilder builder = new SCMAPTools.PreviewBuilder(m);
+        m.PreviewTex = builder.CreatePreview(Device, 256, 256);
+
+
+        //m.PreviewTex = GetDummyPreviewTexture(Device)
+        //PreviewBuilder pb = new PreviewBuilder(Program.MapHeightData, ts, tml.LowerStratumBitmap, tml.UpperStratumBitmap, m.Water, Device);
+        //m.PreviewTex = pb.GetMapPreviewTexture(Device);
+        //SlimDX.Direct3D10.Texture2D previewTex = builder.CreatePreview(1024, 1024);
+        //SlimDX.Direct3D10.Texture2D.ToFile(previewTex, SlimDX.Direct3D10.ImageFileFormat.Png, "Test.png");
+
+        Console.WriteLine(" Done. " + Program.GetTimeStampDifference());
+
         return m;
     }
     private static float GetRandomLightingMultiplier(Random r)
