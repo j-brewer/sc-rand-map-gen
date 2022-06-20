@@ -37,6 +37,7 @@ function GetInfo(info_type){
 			GGen_AddEnumArg("include_middle_island","Island In Middle","Affects whether or not the map has an island in the middle.", 0, "No;Yes");
 			GGen_AddEnumArg("middle_island_type","Middle Island Type","Contrls the type of island in the middle of the map.", 0, "Volcano;Flat");
 			GGen_AddEnumArg("rotation","Map Rotation (degrees)","Affects the overall orientation of the map islands.", 0, "0;15;30;45;60;75;90");
+			GGen_AddIntArg("number_small_islands","Number of Small Islands","Affects how many small islands the map has", 1, 0, 4, 1);
 			return 0;
 	}
 }
@@ -71,6 +72,7 @@ function Generate(){
 	local include_middle_island = GGen_GetArgValue("include_middle_island")
 	local middle_island_type = GGen_GetArgValue("middle_island_type")
 	local map_rotation = GGen_GetArgValue("rotation") * (PI/12);
+	local number_small_islands = GGen_GetArgValue("number_small_islands");
 	
 	
 	
@@ -91,15 +93,15 @@ function Generate(){
 	startPos.SetValue(startPos.GetWidth()-1,1, 16384)
 	
 	//Map Construction
-	local seaLevel = 1000;
+	local seaLevel = 1600;
 	local islandHeight = 2800;
 	
 	local base = GGen_Data_2D(mapSize, mapSize, seaLevel);
 	
 	//Create Island Tile
 	local islandTile = GGen_Data_2D(islandSize * 2, islandSize * 2, 0);
-	local beachSize = 24;
 	
+	local beachSize = 24;
 	local islandShape = rand() % 3;
 	if(islandShape == 0)
 	{
@@ -130,8 +132,22 @@ function Generate(){
 		islandTile.ScaleTo(islandTile.GetWidth() + 5* islandSize/3, islandTile.GetHeight() + 5 * islandSize/3, false)
 		islandTile.Rotate(180, true);
 	}
-	islandTile.Smooth(6);	
-
+	islandTile.Smooth(6);
+	
+	//Small Islands Logic
+	local smallIslandTile;
+	local smallIslandDistance = islandSize + rand() % 128;
+	local smallIslandDirection = (rand() % 720) / (4 * PI);
+	local si_X = ((floor((cos(smallIslandDirection) * smallIslandDistance) + 0.5)) + "").tointeger();
+	local si_Y = ((floor((sin(smallIslandDirection) * smallIslandDistance) + 0.5)) + "").tointeger();
+	
+	if(number_small_islands > 0)
+	{
+		smallIslandTile = islandTile.Clone();
+		smallIslandTile.ScaleTo(islandSize, islandSize, false);
+		smallIslandTile.Multiply(1.025);		
+	}
+	
 	if(land_collar == 1)
 	{
 		base.Fill(islandTile.Max());
@@ -190,8 +206,16 @@ function Generate(){
 			
 		}
 	}
+	
+	//Place Players Islands (and any other islands)
 	local angle2 = (floor(map_rotation * (360 / (2.0 * PI))) ).tointeger();
 	islandTile.Rotate(-angle2, true);
+	
+	if(number_small_islands > 0)
+	{
+		smallIslandTile.Rotate(-angle2, true);
+	}
+	
 	for(local i = 0; i < startPos.GetWidth() - 1; i=i+1)
 	{
 		local x1 = startPos.GetValue(i,0);
@@ -199,12 +223,34 @@ function Generate(){
 		//base.AddTo(islandTile, x1 - islandTile.GetWidth()/2, y1 - islandTile.GetHeight()/2);
 		base.UnionTo(islandTile, x1 - islandTile.GetWidth()/2, y1 - islandTile.GetHeight()/2);
 		islandTile.Rotate(-angle, true);
+		
+		if(number_small_islands > 0)
+		{
+			for(local k = 0; k < number_small_islands; k++)
+			{
+				local offsetDir = ((1.0 * k) / number_small_islands) * 2 * PI;
+				local si_X = ((floor((cos(smallIslandDirection + offsetDir) * smallIslandDistance) + 0.5)) + "").tointeger();
+				local si_Y = ((floor((sin(smallIslandDirection + offsetDir) * smallIslandDistance) + 0.5)) + "").tointeger();
+				local x2 = startPos.GetValue(i,0) + si_X;
+				local y2 = startPos.GetValue(i,1) + si_Y;
+				if(x2 >= 0 && y2 >= 0 && x2 < mapSize && y2 < mapSize)
+				{
+					base.UnionTo(smallIslandTile, x2 - smallIslandTile.GetWidth()/2, y2 - smallIslandTile.GetHeight()/2);
+				}
+				
+			}
+			smallIslandDirection = smallIslandDirection + ((angle/360.0) * 2.0 * PI);
+			smallIslandTile.Rotate(-angle, true);
+		}
 	}
 
-	base.Smooth(40);
-	base.Distort(islandSize / 4-1, islandSize/4);
+	base.Smooth(30);
+	base.Smooth(20);
+	base.Smooth(10);
+	
+	base.Distort((islandSize / 3)-1, islandSize/4);
 	base.Smooth(2);
-	base.ScaleValuesTo(base.Min(), 2329);
+	base.ScaleValuesTo(base.Min(), 2500);
 	
 	
 	//Add noise	
@@ -233,6 +279,7 @@ function Generate(){
 	base.Union(mainNoise);
 	base.AddMap(noiseLayer2);
 	//base.Add(-base.Min());
+	noiseLayer2 = null;
 	
 	
 	
@@ -245,8 +292,9 @@ function Generate(){
 	local slopeMap = GGen_Data_2D(mapSize, mapSize, GGEN_NATURAL_PROFILE.Min());
 	slopeMap = base.Clone();
 	slopeMap.SlopeMap();
-	
+	//return slopeMap;
 	slopeMap.ScaleValuesTo(0,1024);
+	
 	slopeMap.Add(-128);
 	slopeMap.Clamp(0, 350);
 	slopeMap.ScaleValuesTo(0,16384)
@@ -296,7 +344,16 @@ function Generate(){
 	beachTerrain.CropValues(0, 16383);
 	beachTerrain.Add(12000);
 	beachTerrain.Clamp(12000,16384);
-	beachTerrain.CropValues(12001, 16384);
+	beachTerrain.CropValues(12001, 16383);
+	
+	local beachTerrain2 = GGen_Data_2D(mapSize, mapSize, GGEN_NATURAL_PROFILE.Min());
+	beachTerrain2 = base.Clone();
+	beachTerrain2.CropValues(beachTerrainStart-1536, beachTerrainStart-221);
+	beachTerrain2.Clamp(beachTerrainStart-1536, beachTerrainStart-221);
+	beachTerrain2.ScaleValuesTo(12000,16384);
+	beachTerrain2.CropValues(12001, 16383);
+	beachTerrain.AddMap(beachTerrain2);	
+	beachTerrain2 = null;
 	beachTerrain.Smooth(2);
 	beachTerrain.ScaleValuesTo(0,16384);
 	beachTerrain.ScaleTo(mapSize/2,mapSize/2,false)	

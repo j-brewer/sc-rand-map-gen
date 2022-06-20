@@ -9,7 +9,7 @@ function GetInfo(info_type){
 			GGen_AddEnumArg("players","Number of players to fit on map","Affects the number of players on players map.", 2, "2;4;6;8;10;12");
 			GGen_AddEnumArg("feature_size","Feature Size","Size of map noise features.", 1, "Tiny;Medium;Large");
 			GGen_AddEnumArg("smoothness","Smoothness","Affects amount of detail on the map.", 1, "Very Rough;Rough;Smooth;Very Smooth");
-			GGen_AddIntArg("start_distance_from_center","Player Distance From Center","Affects the distance of the islands from the center of the map.", 8, 0, 13, 1);			
+			GGen_AddIntArg("start_distance_from_center","Player Distance From Center","Affects the distance of the islands from the center of the map.", 8, 0, 18, 1);			
 			GGen_AddEnumArg("rotation","Map Rotation (degrees)","Affects the overall orientation of the map islands.", 0, "0;15;30;45;60;75;90;105;120;135;150;165");
 			return 0;
 	}
@@ -32,7 +32,7 @@ function SwapStartLocation(data, positionOne, positionTwo)
 
 function CreateMountainLayer(rH, rW, rA)
 {
-	local num_mountains = rand() % 60;
+	local num_mountains = (rand() % 12) * 10;
 	
 	local mountains = GGen_Data_2D(rW, rH, 0);
 	for(local i = 0; i < num_mountains; i=i+1)
@@ -71,37 +71,15 @@ function CreateVolcanoLayer(rH, rW, rA)
 	 	local mY = rand() % rH;
 	 	local mS = rand() % 25 + 25;
 	 	
-	 	local mShp = rand() % 2;
-	 	if(mShp == 1)
-	 	{
-	 		local m = GGen_Path();
-			m.AddPointByCoords(mX-mS, mY-mS);
-			m.AddPointByCoords(mX+mS, mY-mS);
-			m.AddPointByCoords(mX+mS, mY+mS);
-			m.AddPointByCoords(mX-mS, mY+mS);
-			
-			local m2 = GGen_Path();
-			local crater = mS / 2;
-			m2.AddPointByCoords(mX-crater, mY-crater);
-			m2.AddPointByCoords(mX+crater, mY-crater);
-			m2.AddPointByCoords(mX+crater, mY+crater);
-			m2.AddPointByCoords(mX-crater, mY+crater);
-		
-			vol.FillPolygon(m, rA);
-			vol.FillPolygon(m2, rA-2000);
-		}
-		else
-		{
-			vol.RadialGradient(mX, mY, mS, rA, rA, false);
-			vol.RadialGradient(mX, mY, mS/4, rA - 1000, rA - 1000, false);
-		}
+		vol.RadialGradient(mX, mY, mS, rA, rA, false);
+		vol.RadialGradient(mX, mY, mS/4, rA - 1500, rA - 1500, false);
 	}
 	return vol;
 }
 
 function CreateOceanLayer(rH, rW, rA, rL, mW)
 {
-	local num_oceans = rand() % 9;
+	local num_oceans = rand() % 8;
 	local ocean_size = (rand() % mW/3) + 50
 	local shoreline = 100;
 	
@@ -123,7 +101,7 @@ function CreateOceanLayer(rH, rW, rA, rL, mW)
 
 function CreateLakeLayer(rH, rW, rA, rL)
 {
-	local num_lakes = rand() % 10;
+	local num_lakes = (rand() % 10) * 4;
 	local lakes = GGen_Data_2D(rW, rH, 0);
 	
 	for(local i = 0; i < num_lakes; i=i+1)
@@ -157,7 +135,7 @@ function CreateLakeLayer(rH, rW, rA, rL)
 
 function CreateRiverLayer(rH, rW, rA, rL)
 {
-	local num_rivers = rand() % 5;
+	local num_rivers = rand() % 6;
 	local rivers = GGen_Data_2D(rW, rH, 0);
 	local riverWidth = rand() % 40 + 20;
 	local waterTransition = riverWidth*2;
@@ -175,11 +153,15 @@ function CreateRiverLayer(rH, rW, rA, rL)
 	rivers.Gradient(0, y1-waterTransition, 0, y1, rL, rA, false);
 	rivers.Gradient(0, y2, 0, y2 + waterTransition, rA, rL, false);	
 	
-	if(num_rivers == 1)
+	if(num_rivers > 2)
+	{
+		rivers.SetValueInRect(0,0, rW-1, rH-1, 0);
+	}	
+	else if(num_rivers == 1)
 	{
 		rivers.SetValueInRect(0,0, rW/2, rH-1, 0);
 	}
-	if(num_rivers == 2)
+	else if(num_rivers == 2)
 	{
 		rivers.SetValueInRect(rW/2, 0, rW-1, rH-1, 0);
 	}
@@ -193,7 +175,7 @@ function Generate(){
 	local feature_size = GGen_GetArgValue("feature_size");
 	local smoothness = 1 << GGen_GetArgValue("smoothness");
 	local player_count = (GGen_GetArgValue("players") + 1) * 2;
-	local startPosDistance = ((GGen_GetArgValue("start_distance_from_center")+ 16) * width) / 64;
+	local startPosDistance = ((GGen_GetArgValue("start_distance_from_center")+ 10) * width) / 64;
 	local rotation = GGen_GetArgValue("rotation") * (PI/12);
 	
 	GGen_InitProgress(11);
@@ -275,6 +257,7 @@ function Generate(){
 	local oceanDepth = 1000;
 	local baseHeight = 3600;
 	local mountainHeight = 6500;
+	local volcanoHeight = 7500;
 	
 	local base = GGen_Data_2D(width, height, baseHeight);
 	
@@ -300,7 +283,7 @@ function Generate(){
 	GGen_IncreaseProgress();
 	
 	//Volcanos
-	local volcanos = CreateVolcanoLayer(rH, rW, mountainHeight + 500);
+	local volcanos = CreateVolcanoLayer(rH, rW, mountainHeight);
 	
 	volcanos.Rotate(-angle2, true);
 	volcanos.ResizeCanvas(width, height, (rW - width)/2, (rH - height)/2);
