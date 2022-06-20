@@ -9,3 +9,5 @@ The goals of the frontend script is to:
    appropriate parameters to create a playable Supreme Commander map
 
 4. Place the finished map in the appropriate location for use with FA
+
+NOTE: The batch files in this folder are included as examples to build upon.
