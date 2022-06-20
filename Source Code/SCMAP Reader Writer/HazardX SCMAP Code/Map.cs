@@ -96,7 +96,6 @@ public class Map
     public Color MinimapLandEndColor;
     public Color MinimapContourColor; //Not sure about this one
     
-<Merge Conflict>
     public void Initialize()
     {
         TerrainTypeData = new byte[Height * Width];
