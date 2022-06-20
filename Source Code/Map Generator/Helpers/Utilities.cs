@@ -22,6 +22,7 @@
 
 using SlimDX;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public sealed class Utilities
@@ -91,5 +92,27 @@ public sealed class Utilities
             rtVal = 1.0 - ((max - min) / total);
         }
         return rtVal;
+    }
+
+    public static int[] GetShuffledIntegerArray(int start, int end, Random r)
+    {
+        int[] arr = new int[end - start + 1];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            arr[i] = start + i;
+        }
+        return (int[])Shuffle(arr, r);
+    }
+    public static IList<T> Shuffle<T>(IList<T> list, Random rnd)
+    {
+        for (var i = 0; i < list.Count; i++)
+        {
+            int j = rnd.Next(i, list.Count);
+            var temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
+
+        return list;
     }
 }
