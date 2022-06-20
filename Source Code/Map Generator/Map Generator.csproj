@@ -90,6 +90,7 @@
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="Helpers\WaterMapBuilder.cs" />
     <Compile Include="Objects\Enumerations.cs" />
+    <Compile Include="Objects\Exceptions.cs" />
     <Compile Include="Objects\HeightMap.cs" />
     <Compile Include="Objects\Marker.cs" />
     <Compile Include="Objects\ReclaimableProp.cs" />

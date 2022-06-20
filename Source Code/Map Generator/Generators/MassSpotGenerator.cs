@@ -42,8 +42,18 @@ public class MassSpotGenerator
 		get { return _allowUnderwaterMassSpots; }
 		set { _allowUnderwaterMassSpots = value; }
 	}
-	public MassSpotGenerator(HeightMap h, float mapWaterElevation, List<Marker> startPositionList, int rngSeed)
+    private int goalMassSpotsPerPlayer;
+    public double FinalMassPlacementScore;
+
+    private int MassSpotCount
+    {
+        get { return massMarkerList.Count; }
+    }
+
+	public MassSpotGenerator(HeightMap h, int desiredMassSpotsPerPlayer, float mapWaterElevation, List<Marker> startPositionList, int rngSeed)
 	{
+        FinalMassPlacementScore = 0.0;
+        goalMassSpotsPerPlayer = desiredMassSpotsPerPlayer;
 		massMarkerList = new List<Marker>();
 		hMap = h;
 		this.r = new Random(rngSeed);
@@ -59,7 +69,67 @@ public class MassSpotGenerator
              availableMassSpotIds.Push(k);
         }
 	}
-	public List<Marker> GetFinalMassSpotList()
+    public List<Marker> GenerateMassSpots()
+    {
+        int massDensity = r.Next(0, 14);
+        int massDensityA = r.Next(0, massDensity);
+        //int massDensityB = r.Next(0, Math.Max(0, massDensity - massDensityA));
+        int massDensityB = r.Next(0, Math.Max(0, massDensity - massDensityA));
+        int massDensityC = Math.Max(0, massDensity - massDensityA - massDensityB);
+
+        int TotalAttempts = 200;
+        double bestScore = 0;
+
+        AddStartLocationMassSpots();
+        AddStartLocationBasedMassSpots(massDensityA, 8, 60);
+        AddRadialPositionedMassSpots(massDensityB);
+
+        List<Marker> tempListMS = new List<Marker>();
+
+        for (int i = 0; i < TotalAttempts; i++)
+        {
+            BuildRandomDisributionMassSpotList(startingPositionList.Count * massDensityC, 60);
+
+            double thisScore = MassSpotFairnessScore();
+            if (thisScore > bestScore)
+            {
+                tempListMS = RemoveRandomDistributionMassSpots();
+                bestScore = thisScore;
+            }
+            else
+            {
+                RemoveRandomDistributionMassSpots();
+            }
+
+            if (bestScore > .97)
+            {
+                break;
+            }
+        }
+
+        AddRandomDisributionMassSpots(tempListMS);
+        ImproveMassSpotFairness((massDensityB * startingPositionList.Count), 1);
+        ImproveMassSpotFairness((massDensityB * startingPositionList.Count), 1);
+        ImproveMassSpotFairness((massDensityB * startingPositionList.Count), 1);
+        ImproveMassSpotFairness((massDensityB * startingPositionList.Count), 1);
+        ImproveMassSpotFairness((massDensityB * startingPositionList.Count), 1);
+
+        List<Marker> mList = GetFinalMassSpotList();
+
+        for (int j = 0; j < mList.Count; j++)
+        {
+            MassMarker mm = (MassMarker)mList[j];
+            if (mm.MassSpotScoreMatrix.Count > 0)
+            {
+                Console.WriteLine(mm.Name + ": " + mm.GetMassSpotFairness());
+            }
+        }
+        PrintMassSpotFairnessScores();
+        FinalMassPlacementScore = MassSpotFairnessScore();
+
+        return mList;
+    }
+    private List<Marker> GetFinalMassSpotList()
 	{
 		if (generationDone) {
 			throw new InvalidOperationException("The final mass spot list cannot be retrieved more than once.");
@@ -67,10 +137,7 @@ public class MassSpotGenerator
 		generationDone = true;
 		return massMarkerList;
 	}
-	public int MassSpotCount {
-		get { return massMarkerList.Count; }
-	}
-    public void AddStartLocationMassSpots()
+    private void AddStartLocationMassSpots()
 	{
 		if (MassSpotCount > 0) {
 			throw new InvalidOperationException("Starting location mass spots can only be added to an empty mass spot list.");
@@ -110,7 +177,7 @@ public class MassSpotGenerator
 			}
 		}
 	}
-	public void AddStartLocationBasedMassSpots(int MassSpotsPerStartLocation, int MinDistance, int MaxDistance)
+    private void AddStartLocationBasedMassSpots(int MassSpotsPerStartLocation, int MinDistance, int MaxDistance)
 	{
 		int windowSize = 16;
 		double radius = 0;
@@ -160,8 +227,83 @@ public class MassSpotGenerator
 			}
 		}
 	}
+    private void AddRadialPositionedMassSpots(int MassSpotsPerStartLocation)
+    {
+        int halfWindowSize = 10;
 
-    public List<Marker> RemoveRandomDisributionMassSpots()
+        Vector2 p = GetCenterPointOfStartLocations();
+        Vector2[] v = GetVectorsFromCenterToStartPositions(p);
+        int[] PositionList = Utilities.GetShuffledIntegerArray(25, 75, r);
+
+        int numberPlaced = 0;
+
+        //Loop through the list and try to place mass spots
+        for (int i = 0; i < PositionList.Length && numberPlaced < MassSpotsPerStartLocation; i++)
+        {
+            //Calculate vector length to use
+            float a = (float)(PositionList[i]) / 100.0f;
+
+            try
+            {
+                Point[] mpList = new Point[startingPositionList.Count];
+
+                for (int j = 0; j < v.Length; j++)
+                {
+                    //Determine center point for mass spot placement window
+                    Vector2 cp = v[j] * a + p;
+                    Rectangle rect = new Rectangle((int)(cp.X - halfWindowSize), (int)(cp.Y - halfWindowSize), (int)(halfWindowSize * 2), (int)(halfWindowSize * 2));
+                    Point massPoint = FindSuitableLocation(rect, 0);
+
+                    //Check to make sure we found a viable mass spot
+                    if (massPoint == Point.Empty)
+                    {
+                        throw new RadialMassSpotPlacementException();
+                    }
+                    mpList[j] = massPoint;
+
+                }
+
+                //If placement was successful, add mass spots to list
+                for (int k = 0; k < startingPositionList.Count; k++)
+                {
+                    Point pos = mpList[k];
+                    int mId = availableMassSpotIds.Pop();
+                    MassMarker ms = new MassMarker("Mass " + mId.ToString("D3"));
+                    ms.MassSpotNumber = mId;
+                    ms.IsStartingMassSpot = true;
+                    ms.Position = new Vector3((float)(pos.X + 0.5), (float)hMap.GetFAHeight(pos.X, pos.Y), (float)(pos.Y + 0.5));
+                    massMarkerList.Add(ms);
+                }
+                numberPlaced++;
+            }
+            catch (RadialMassSpotPlacementException) { }
+        }
+    }
+
+    private Vector2[] GetVectorsFromCenterToStartPositions(Vector2 centerPoint)
+    {
+        Vector2[] temp = new Vector2[startingPositionList.Count];
+
+        for (int i = 0; i < startingPositionList.Count; i++)
+        {
+            Vector3 v = startingPositionList[i].Position;
+            temp[i] = new Vector2(centerPoint.X - (int)(v.X + 0.5f), centerPoint.Y - (int)(v.Z + 0.5f));
+        }
+
+        return temp;
+    }
+    private Vector2 GetCenterPointOfStartLocations()
+    {
+        Vector3 temp = new Vector3();
+        for (int i = 0; i < startingPositionList.Count; i++)
+        {
+            temp = temp + startingPositionList[i].Position;
+        }
+
+        return new Vector2((int)((temp.X / startingPositionList.Count) + 0.5f), (int)((temp.Z / startingPositionList.Count) + 0.5f));
+    }
+
+    private List<Marker> RemoveRandomDistributionMassSpots()
     {
         List<Marker> rtVal = new List<Marker>();
 
@@ -180,7 +322,7 @@ public class MassSpotGenerator
         }
         return rtVal;
     }
-    public void AddRandomDisributionMassSpots(List<Marker> listToAdd)
+    private void AddRandomDisributionMassSpots(List<Marker> listToAdd)
     {
         foreach (MassMarker mm in listToAdd)
         {
@@ -196,8 +338,7 @@ public class MassSpotGenerator
             }
         }        
     }
-
-    public void BuildRandomDisributionMassSpotList(int massSpots, int minDistanceFromStartPoint)
+    private void BuildRandomDisributionMassSpotList(int massSpots, int minDistanceFromStartPoint)
 	{
         int placedCount = 0;
         int loopCount = 0;
@@ -218,7 +359,7 @@ public class MassSpotGenerator
             loopCount++;
 		}
     }
-	public void BuildRandomDisributionMassSpotList(int MassDensity, int MassDensityVariance, int minDistanceFromStartPoint)
+    private void BuildRandomDisributionMassSpotList(int MassDensity, int MassDensityVariance, int minDistanceFromStartPoint)
 	{
 		int md = Math.Max(Math.Min(MassDensity, 100), 1);
 		int windowSize = 256;
@@ -278,7 +419,8 @@ public class MassSpotGenerator
                 bool isNotCollision = !this.IsMassSpotCollision((float)(initialX + 0.5f), (float)(initialY + 0.5f));
 				bool isNotShore = IsNotShoreline(initialX, initialY);
 				bool isNotToCloseToStartPosition = DistanceToClosestStartPosition(initialX, initialY) > minDistanceFromStartPoint;
-				if (store1 & store2 & store3 & store4 & isNotCollision & (AllowUnderwaterMassSpots | !initialIsInWater) & isNotToCloseToStartPosition) {
+                if (store1 & store2 & store3 & store4 & isNotCollision & (AllowUnderwaterMassSpots | !initialIsInWater) & isNotToCloseToStartPosition & isNotShore)
+                {
 					return new Point(initialX, initialY);
 				}
 			}
@@ -288,11 +430,25 @@ public class MassSpotGenerator
 	}
 	private bool IsNotShoreline(int posX, int posY)
 	{
-		bool rt = false;
-		double cellHeight = hMap.GetFAHeight(posX, posY);
-		if (cellHeight <= waterElevation - 3 | cellHeight > waterElevation + 1.0) {
-			rt = true;
-		}
+		bool rt = true;
+
+        //Check area around point for any cells below water elevation
+        for(int i = posX-4; i <= posX + 4; i++)
+        {
+            for(int j = posY-4;j <= posY + 4; j++)
+            {
+                int xP = Math.Min(Math.Max(0, i), hMap.Width - 1);
+                int yP = Math.Min(Math.Max(0, j), hMap.Height - 1);
+                double cellHeight = hMap.GetFAHeight(xP, yP);
+                if (cellHeight <= waterElevation)
+                {
+                    rt = false;
+                }
+            }
+        }
+        
+		
+		
 		return rt;
 	}
 	private bool IsWater(int posX, int posY)
@@ -303,7 +459,7 @@ public class MassSpotGenerator
 	private bool IsFlat(Rectangle bounds)
 	{
 		bool result = true;
-        if (bounds.Left < 0 || bounds.Right > hMap.Width || bounds.Top < 0 || bounds.Bottom > hMap.Height)
+        if (bounds.Left < 2 || bounds.Right > hMap.Width-2 || bounds.Top < 2 || bounds.Bottom > hMap.Height-2)
         {
             result = false;
         }
@@ -332,7 +488,6 @@ public class MassSpotGenerator
         }
 		return result;
 	}
-
 	private bool IsMassSpotCollision(float x, float y)
 	{
 		return MassSpotGenerator.IsMassSpotCollision(x, y, massMarkerList, 0);
@@ -483,8 +638,7 @@ public class MassSpotGenerator
             iP = FindNearestLand(iP);
         }
         return iP;
-    }    
-    
+    }      
     private int GetWorstMassScoreIndex()
     {
         int worstIdx = -1;
@@ -544,9 +698,7 @@ public class MassSpotGenerator
         }
         return 1.0 - ((max - min)/max);
     }
-
-
-    public void ImproveMassSpotFairness(int iterations, int attemptsPerMassSpot)
+    private void ImproveMassSpotFairness(int iterations, int attemptsPerMassSpot)
     {
         attemptsPerMassSpot = 1;
         int windowSize = hMap.Width / 32;
@@ -613,8 +765,7 @@ public class MassSpotGenerator
         }
         Console.WriteLine("End: " + fs.ToString());
     }
-
-    public double MassSpotFairnessScore()
+    private double MassSpotFairnessScore()
     {
         double rt = 0;
         double[] distScore = new double[startingPositionList.Count];
@@ -653,8 +804,7 @@ public class MassSpotGenerator
 
         return rt;
     }
-
-    public double PrintMassSpotFairnessScores()
+    private double PrintMassSpotFairnessScores()
     {
         double rt = 0;
         double[] distScore = new double[startingPositionList.Count];
